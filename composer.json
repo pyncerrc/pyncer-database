@@ -1,0 +1,21 @@
+{
+    "name": "pyncer/database",
+    "type": "library",
+    "description": "Pyncer database management library.",
+    "homepage": "https://pyncer.com/database",
+    "license": "Unlicense",
+    "require": {
+        "php": ">=8.1",
+        "pyncer/core": "*",
+        "pyncer/exception": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pyncer\\Database\\": "src/"
+        }
+    },
+    "support": {
+        "issues": "https://github.com/pyncerrc/pyncer-database/issues",
+        "source": "https://github.com/pyncerrc/pyncer-database"
+    }
+}
