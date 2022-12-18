@@ -63,8 +63,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
         $this->setCollation($driver->getParam('collation', $this->getDefaultCollation()));
         $this->setEngine($driver->getParam('engine', $this->getDefaultEngine()));
 
-        $default = $this->getCharacterSet() . ' COLLATE ' . $this->getCollation();
-        $this->setNames($driver->getParam('names', $default));
+        $this->setNames($this->getCharacterSet(), $this->getCollation());
 
         $timeZone = $driver->getParam('time_zone');
         if ($timeZone !== null) {
@@ -91,9 +90,16 @@ abstract class AbstractSqlConnection extends AbstractConnection
     abstract protected function getDefaultCollation(): string;
     abstract protected function getDefaultEngine(): string;
 
-    public function setNames(string $names): bool
+    public function setNames(string $characterSet, string $collation): bool
     {
-        return $this->execute('SET NAMES \'' . $this->escapeString($names) . '\'');
+        $characterSet = $this->buildScalar($this->getCharacterSet());
+        $collation = $this->buildScalar($this->getCollation());
+
+        return $this->execute(sprintf(
+            "SET NAMES %s COLLATE %s",
+            $characterSet,
+            $collation,
+        ));
     }
 
     public function setTimeZone(string $timezone): bool
