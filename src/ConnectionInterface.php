@@ -78,7 +78,7 @@ interface ConnectionInterface
     */
     public function insert(string $table): InsertQueryInterface;
 
-    public function InsertId(): int;
+    public function insertId(): int;
 
     /**
     * Updates rows in the specified table.
