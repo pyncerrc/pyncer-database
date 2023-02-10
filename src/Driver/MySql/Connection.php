@@ -194,7 +194,7 @@ class Connection extends AbstractSqlConnection
 
     public function fetch(object $result): ?array
     {
-        if (!($result instanceof mysqli_result)) {
+        if (!$result instanceof mysqli_result) {
             throw new InvalidArgumentException('Expected mysqli_result.');
         }
 
@@ -208,7 +208,7 @@ class Connection extends AbstractSqlConnection
     }
     public function fetchIndexed(object $result): ?array
     {
-        if (!($result instanceof mysqli_result)) {
+        if (!$result instanceof mysqli_result) {
             throw new InvalidArgumentException('Expected mysqli_result.');
         }
 
@@ -223,7 +223,7 @@ class Connection extends AbstractSqlConnection
 
     public function seek($result, int $offset): bool
     {
-        if (!($result instanceof mysqli_result)) {
+        if (!$result instanceof mysqli_result) {
             throw new InvalidArgumentException('Expected mysqli_result.');
         }
 
@@ -231,7 +231,7 @@ class Connection extends AbstractSqlConnection
     }
     public function numRows($result): int|string
     {
-        if (!($result instanceof mysqli_result)) {
+        if (!$result instanceof mysqli_result) {
             throw new InvalidArgumentException('Expected mysqli_result.');
         }
 
@@ -239,7 +239,7 @@ class Connection extends AbstractSqlConnection
     }
     public function free($result): bool
     {
-        if (!($result instanceof mysqli_result)) {
+        if (!$result instanceof mysqli_result) {
             throw new InvalidArgumentException('Expected mysqli_result.');
         }
 
