@@ -52,7 +52,7 @@ trait BuildConditionsTrait
 
         $len = len($value) + len($separator);
 
-        $value = $this->database->escapeString($value);
+        $value = $this->getConnection()->escapeString($value);
 
         return '(' . $column . ' = \'' . $value . '\' OR ' . // Equals
             'SUBSTRING(' . $column . ', 1, ' . $len . ') = \'' . $value . $separator . '\' OR ' . // Starts wiith
@@ -152,7 +152,7 @@ trait BuildConditionsTrait
         $column = $this->buildConditionColumn($column);
 
         $value = $this->escapeWildCards($value);
-        $value = $this->database->escapeString($value);
+        $value = $this->getConnection()->escapeString($value);
         $value = '\'%' . $value . '%\'';
 
         if ($caseSensitive) {
@@ -172,7 +172,7 @@ trait BuildConditionsTrait
 
         $value = $this->escapeWildCards($value);
         $value = str_replace('*', '%', $value);
-        $value = $this->database->escapeString($value);
+        $value = $this->getConnection()->escapeString($value);
         $value = '\'' . $value . '\'';
 
         if ($caseSensitive) {
@@ -206,7 +206,7 @@ trait BuildConditionsTrait
     {
         $column = $this->buildConditionColumn($column);
 
-        $date = $this->database->date($date);
+        $date = $this->getConnection()->date($date);
         $date = $this->buildScalar($date);
 
         return 'DATE(' . $column . ') ' . $operator . ' ' . $date;
@@ -220,10 +220,10 @@ trait BuildConditionsTrait
     {
         $column = $this->buildConditionColumn($column);
 
-        $startDate = $this->database->date($startDate);
+        $startDate = $this->getConnection()->date($startDate);
         $startDate = $this->buildScalar($startDate);
 
-        $endDate = $this->database->date($endDate);
+        $endDate = $this->getConnection()->date($endDate);
         $endDate = $this->buildScalar($endDate);
 
         return 'DATE(' . $column . ') >= ' . $startDate .
@@ -236,7 +236,7 @@ trait BuildConditionsTrait
         string $operator = '='
     ): static
     {
-        $dateTime = $this->database->dateTime($dateTime);
+        $dateTime = $this->getConnection()->dateTime($dateTime);
         return $this->buildCompareCondition($column, $dateTime, $operator);
     }
 
@@ -248,10 +248,10 @@ trait BuildConditionsTrait
     {
         $column = $this->buildConditionColumn($column);
 
-        $startDateTime = $this->connection->dateTime($startDateTime);
+        $startDateTime = $this->getConnection()->dateTime($startDateTime);
         $startDateTime = $this->buildScalar($startDateTime);
 
-        $endDateTime = $this->connection->dateTime($endDateTime);
+        $endDateTime = $this->getConnection()->dateTime($endDateTime);
         $endDateTime = $this->buildScalar($endDateTime);
 
         $this->conditions[] = $column . ' >= ' . $startDateTime .
@@ -284,6 +284,6 @@ trait BuildConditionsTrait
 
         $age = 'DATE_FORMAT(NOW(), \'%Y\') - DATE_FORMAT(' . $column . ', \'%Y\') - (DATE_FORMAT(NOW(), \'00-%m-%d\') < DATE_FORMAT(' . $column . ', \'00-%m-%d\'))';
 
-        return $age . ' ' . $operator . ' \'' . $this->connection->escapeString($value) . '\'';
+        return $age . ' ' . $operator . ' \'' . $this->getConnection()->escapeString($value) . '\'';
     }
 }
