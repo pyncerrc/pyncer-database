@@ -3,22 +3,24 @@ namespace Pyncer\Database\Sql\Record;
 
 use Pyncer\Database\Record\AbstractSelectQuery;
 use Pyncer\Database\Record\ConditionsInterface;
-use Pyncer\Database\Sql\Build\BuildTableTrait;
 use Pyncer\Database\Sql\Build\BuildColumnTrait;
 use Pyncer\Database\Sql\Build\BuildColumnsTrait;
 use Pyncer\Database\Sql\Build\BuildGroupByTrait;
 use Pyncer\Database\Sql\Build\BuildJoinsTrait;
 use Pyncer\Database\Sql\Build\BuildOrderByTrait;
+use Pyncer\Database\Sql\Build\BuildScalarTrait;
+use Pyncer\Database\Sql\Build\BuildTableTrait;
 use Pyncer\Database\Sql\Record\Conditions;
 
 class SelectQuery extends AbstractSelectQuery
 {
-    use BuildTableTrait;
     use BuildColumnTrait;
     use BuildColumnsTrait;
     use BuildGroupByTrait;
     use BuildJoinsTrait;
     use BuildOrderByTrait;
+    use BuildScalarTrait;
+    use BuildTableTrait;
 
     protected function initializeWhere(): ConditionsInterface
     {
