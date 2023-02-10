@@ -15,7 +15,7 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
     use TableTrait;
 
     private string $name;
-    private array $column;
+    private array $columns;
     private bool $unique;
     private bool $fulltext;
 
