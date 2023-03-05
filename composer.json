@@ -17,5 +17,10 @@
     "support": {
         "issues": "https://github.com/pyncerrc/pyncer-database/issues",
         "source": "https://github.com/pyncerrc/pyncer-database"
+    },
+    "extra" : {
+        "branch-alias" : {
+            "dev-main" : "1.0-dev"
+        }
     }
 }
