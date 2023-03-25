@@ -1,6 +1,13 @@
 # Change Log
 
-## 1.0.1 - 2023-05-05
+## 1.0.2 - 2023-03-25
+
+### Fixed
+
+- Dynamic property deprecation error in table IndexQuery
+- Missing types in QueryResult
+
+## 1.0.1 - 2023-03-05
 
 ### Fixed
 
