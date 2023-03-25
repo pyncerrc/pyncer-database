@@ -13,17 +13,17 @@ class QueryResult implements QueryResultInterface
 {
     use ConnectionTrait;
 
-    private $query;
-    private $params;
-    private $prefix;
+    private SelectQueryInterface $query;
+    private array $params;
+    private string $prefix;
 
-    private $result;
-    private $count;
-    private $offset;
-    private $currentCount;
-    private $currentOffset;
-    private $currentRow;
-    private $endOfQuery = false;
+    private null|bool|array|object $result;
+    private ?int $count;
+    private int $offset;
+    private int $currentCount;
+    private int $currentOffset;
+    private ?array $currentRow;
+    private bool $endOfQuery = false;
 
     private $rewound = false;
 
