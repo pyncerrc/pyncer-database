@@ -14,6 +14,7 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
     use CommentTrait;
     use TableTrait;
 
+    private ?TableQueryInterface $query;
     private string $name;
     private array $columns;
     private bool $unique;
@@ -33,6 +34,7 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
         $this->setUnique(false);
         $this->setFulltext(false);
         $this->setComment(null);
+        $this->setQuery(null);
     }
 
     public static function fromTableQuery(
@@ -47,7 +49,7 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
             ...$columnNames
         );
 
-        $index->query = $query;
+        $index->setQuery($query);
 
         return $index;
     }
@@ -55,6 +57,11 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
     public function getQuery(): ?TableQueryInterface
     {
         return $this->query;
+    }
+    protected function setQuery(?TableQueryInterface $value): static
+    {
+        $this->query = $value;
+        return $this;
     }
 
     public function getName(): string
@@ -99,10 +106,6 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
         $this->fulltext = false;
         return $this;
     }
-    /* public function unique(): static
-    {
-        return $this->setUnique(true);
-    } */
 
     public function getFulltext(): bool
     {
@@ -114,10 +117,6 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
         $this->unique = false;
         return $this;
     }
-    /* public function fulltext(): static
-    {
-        return $this->setFulltext(true);
-    } */
 
     public function equals(mixed $value): bool
     {

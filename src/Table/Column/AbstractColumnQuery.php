@@ -40,6 +40,7 @@ abstract class AbstractColumnQuery extends AbstractQuery implements
         $this->setNull(false);
         $this->setDefault(Value::NONE);
         $this->setComment(null);
+        $this->setQuery(null);
     }
 
     public function getQuery(): ?TableQueryInterface

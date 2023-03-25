@@ -36,6 +36,7 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
         $this->setColumns($columnNames);
         $this->setDeleteAction(null);
         $this->setUpdateAction(null);
+        $this->setQuery(null);
     }
 
     public static function fromTableQuery(
@@ -50,7 +51,7 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
             ...$columnNames
         );
 
-        $foreignKey->query = $query;
+        $foreignKey->setQuery($query);
 
         return $foreignKey;
     }
@@ -58,6 +59,11 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
     public function getQuery(): ?TableQueryInterface
     {
         return $this->query;
+    }
+    protected function setQuery(?TableQueryInterface $value): static
+    {
+        $this->query = $value;
+        return $this;
     }
 
     public function getName(): string
