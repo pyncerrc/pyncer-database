@@ -211,14 +211,16 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
     public function functions(string $table, $function): FunctionInterface
     {
+        $driverName = $this->getDriver()->getName();
+
         $file = dirname(__DIR__) . DS .
             'driver' . DS .
-            $this->getDriver() . DS .
+            $driverName . DS .
             'functions' . DS .
             $function . '.php';
 
         if (file_exists($file)) {
-            $class = '\Pyncer\Database\Driver\\' . $this->getDriver() . '\Functions\\' . $function;
+            $class = '\Pyncer\Database\Driver\\' . $driverName . '\Functions\\' . $function;
             return new $class($this);
         }
 

@@ -112,7 +112,7 @@ final class Driver
         return $this;
     }
 
-    public function getParam(string $param, $default = null): mixed
+    public function getParam(string $param, mixed $default = null): mixed
     {
         switch ($param) {
             case "name":
@@ -181,5 +181,10 @@ final class Driver
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 }
