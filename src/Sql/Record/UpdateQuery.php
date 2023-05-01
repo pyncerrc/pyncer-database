@@ -28,7 +28,7 @@ class UpdateQuery extends AbstractUpdateQuery
             throw new UnexpectedValueException('Expected columns.');
         }
 
-        $query = "UPDATE " . $this->buildTable($this->getTable()) . " SET ";
+        $query = 'UPDATE ' . $this->buildTable($this->getTable()) . ' SET ';
 
         $columns = [];
 
@@ -41,14 +41,14 @@ class UpdateQuery extends AbstractUpdateQuery
 
             $columns[] =
                 $this->buildTable($this->getTable()) .
-                "." . $this->buildColumn($column) . " = " . $value;
+                '.' . $this->buildColumn($column) . ' = ' . $value;
         }
 
-        $query .= implode(",", $columns);
+        $query .= implode(',', $columns);
 
         $condition = $this->getWhere()->getQueryString();
         if ($condition) {
-            $query .= " WHERE " . $condition;
+            $query .= ' WHERE ' . $condition;
         }
 
         return $query;

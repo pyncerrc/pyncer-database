@@ -132,7 +132,7 @@ class QueryResult implements QueryResultInterface
 
     public function count(): int
     {
-        if ($this->currentCount === null) {
+        if (!$this->rewound) {
             $this->rewind();
         }
 

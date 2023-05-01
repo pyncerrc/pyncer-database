@@ -17,7 +17,7 @@ class InsertQuery extends AbstractInsertQuery
 
     public function getQueryString(): string
     {
-        $query = "INSERT" . ($this->ignore ? " IGNORE" : '') . " INTO " .
+        $query = 'INSERT' . ($this->ignore ? ' IGNORE' : '') . ' INTO ' .
             $this->buildTable($this->getTable());
 
         $columns = [];
@@ -37,7 +37,7 @@ class InsertQuery extends AbstractInsertQuery
             }
         }
 
-        $query .= " (" . implode(",", $columns) . ") VALUES(" . implode(",", $values) . ")";
+        $query .= ' (' . implode(',', $columns) . ') VALUES(' . implode(',', $values) . ')';
 
         return $query;
     }

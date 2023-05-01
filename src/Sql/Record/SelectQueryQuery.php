@@ -54,24 +54,24 @@ class SelectQueryQuery extends AbstractSelectQuery
 
     public function getQueryString(): string
     {
-        $query = "SELECT" . ($this->distinct ? " DISTINCT" : '');
+        $query = 'SELECT' . ($this->distinct ? ' DISTINCT' : '');
 
         // Columns
         $query .= $this->buildColumns($this->columns);
 
         // Tables
-        $query .= " FROM (" . $this->getQuery()->getQueryString() . ') AS ' .
+        $query .= ' FROM (' . $this->getQuery()->getQueryString() . ') AS ' .
             $this->buildTable($this->getTable());
 
         // Joins
         if ($this->joins) {
-            $query .= $this->buildJoins($this->joins);
+            $query .= ' ' . $this->buildJoins($this->joins);
         }
 
         // Where condition
         $condition = $this->getWhere()->getQueryString();
         if ($condition) {
-            $query .= " WHERE " . $condition;
+            $query .= ' WHERE ' . $condition;
         }
 
         if ($this->groupBys) {
@@ -81,7 +81,7 @@ class SelectQueryQuery extends AbstractSelectQuery
         // Having condition
         $condition = $this->getHaving()->getQueryString();
         if ($condition) {
-            $query .= " HAVING " . $condition;
+            $query .= ' HAVING ' . $condition;
         }
 
         if ($this->orderBys) {
@@ -89,7 +89,7 @@ class SelectQueryQuery extends AbstractSelectQuery
         }
 
         if ($this->limit) {
-            $query .= " LIMIT " . $this->limit[1] . ", " . $this->limit[0];
+            $query .= ' LIMIT ' . $this->limit[1] . ', ' . $this->limit[0];
         }
 
         return $query;

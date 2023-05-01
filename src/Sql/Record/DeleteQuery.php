@@ -26,7 +26,7 @@ class DeleteQuery extends AbstractDeleteQuery
 
     public function getQueryString(): string
     {
-        $query = "DELETE" ;
+        $query = 'DELETE' ;
         if ($this->joins) {
             $tables = [];
 
@@ -36,20 +36,20 @@ class DeleteQuery extends AbstractDeleteQuery
 
             $query .= ' ' . implode(', ', $tables);
 
-            $query .= " FROM " . $this->buildTable($this->getTable());
+            $query .= ' FROM ' . $this->buildTable($this->getTable());
 
-            $query .= $this->buildJoins($this->joins);
+            $query .= ' ' . $this->buildJoins($this->joins);
         } else {
             if (count($this->getTables()) > 1) {
                 throw new UnexpectedValueException('Multiple tables with no joins.');
             }
 
-            $query .= " FROM " . $this->buildTable($this->getTable());
+            $query .= ' FROM ' . $this->buildTable($this->getTable());
         }
 
         $condition = $this->getWhere()->getQueryString();
         if ($condition) {
-            $query .= " WHERE " . $condition;
+            $query .= ' WHERE ' . $condition;
         }
 
         return $query;

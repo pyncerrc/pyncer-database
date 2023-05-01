@@ -220,7 +220,8 @@ abstract class AbstractSqlConnection extends AbstractConnection
             $function . '.php';
 
         if (file_exists($file)) {
-            $class = '\Pyncer\Database\Driver\\' . $driverName . '\Functions\\' . $function;
+            $class = '\Pyncer\Database\Driver\\' . $driverName .
+                '\Functions\\' . $function . 'Function';
             return new $class($this);
         }
 
@@ -229,7 +230,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             $function . '.php';
 
         if (file_exists($file)) {
-            $class = '\Pyncer\Database\Sql\Function\\' . $function;
+            $class = '\Pyncer\Database\Sql\Function\\' . $function . 'Function';
             return new $class($this, $table);
         }
 

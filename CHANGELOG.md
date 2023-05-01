@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.3 - 2023-04-30
+
+### Fixed
+
+- Fixed error with getting query result count before rewind.
+
 ## 1.0.2 - 2023-04-22
 
 ### Fixed
