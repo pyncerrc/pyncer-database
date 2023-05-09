@@ -14,7 +14,7 @@ abstract class AbstractFunction extends AbstractFunction
     use BuildConditionColumnTrait;
     use BuildScalarTrait;
 
-    public function execute(array $params = null): bool|array|object
+    public function execute(?array $params = null): bool|array|object
     {
         return $this->getConnection()->execute($this->getQueryString(), $params);
     }

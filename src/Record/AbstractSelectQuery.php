@@ -71,7 +71,7 @@ abstract class AbstractSelectQuery extends AbstractRecordQuery implements
         return ($row ? $row[0] : null);
     }
 
-    public function result(array $params = null): QueryResultInterface
+    public function result(?array $params = null): QueryResultInterface
     {
         return new QueryResult($this->getConnection(), $this, $params);
     }

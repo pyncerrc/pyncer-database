@@ -142,7 +142,7 @@ class Connection extends AbstractSqlConnection
         return str_replace('`', '``', $value);
     }
 
-    public function execute(string $query, array $params = null): bool|array|object
+    public function execute(string $query, ?array $params = null): bool|array|object
     {
         if (strlen($query) > 50000) {
             throw new DatabaseException('Max query length of 50,000 reached.');

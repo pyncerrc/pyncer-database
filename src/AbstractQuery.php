@@ -14,7 +14,7 @@ abstract class AbstractQuery implements QueryInterface
         $this->setConnection($connection);
     }
 
-    public function execute(array $params = null): bool|array|object
+    public function execute(?array $params = null): bool|array|object
     {
         return $this->getConnection()->execute($this->getQueryString(), $params);
     }

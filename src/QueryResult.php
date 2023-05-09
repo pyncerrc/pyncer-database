@@ -14,7 +14,7 @@ class QueryResult implements QueryResultInterface
     use ConnectionTrait;
 
     private SelectQueryInterface $query;
-    private array $params;
+    private ?array $params;
     private string $prefix;
 
     private null|bool|array|object $result;
@@ -30,7 +30,7 @@ class QueryResult implements QueryResultInterface
     public function __construct(
         ConnectionInterface $connection,
         SelectQueryInterface $query,
-        array $params = null
+        ?array $params = null
     ) {
         $this->setConnection($connection);
 

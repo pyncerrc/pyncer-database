@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.4 - 2023-05-09
+
+### Fixed
+
+- Fixed TypeError issue with QueryResult.
+
 ## 1.0.3 - 2023-04-30
 
 ### Fixed

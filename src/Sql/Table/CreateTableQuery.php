@@ -19,7 +19,7 @@ class CreateTableQuery extends AbstractCreateTableQuery
     use BuildTableTrait;
     use TableQueryTrait;
 
-    public function execute(array $params = null): bool|array|object
+    public function execute(?array $params = null): bool|array|object
     {
         $params['multi'] = true;
 

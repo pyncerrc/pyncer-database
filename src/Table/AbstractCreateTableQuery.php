@@ -7,7 +7,7 @@ use Pyncer\Database\Table\CreateTableQueryInterface;
 abstract class AbstractCreateTableQuery extends AbstractTableQuery implements
     CreateTableQueryInterface
 {
-    public function execute(array $params = null): bool|array|object
+    public function execute(?array $params = null): bool|array|object
     {
         $table = $this->getTable();
 

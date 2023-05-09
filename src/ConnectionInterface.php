@@ -35,7 +35,7 @@ interface ConnectionInterface
     public function escapeString(string $value): string;
     public function escapeName(string $value): string;
 
-    public function execute(string $query, array $params = null): bool|array|object;
+    public function execute(string $query, ?array $params = null): bool|array|object;
 
     public function fetch(object $result): ?array;
     public function fetchIndexed(object $result): ?array;

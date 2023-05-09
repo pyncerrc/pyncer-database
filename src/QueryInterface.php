@@ -8,5 +8,5 @@ interface QueryInterface extends Stringable
 {
     public function getConnection(): ConnectionInterface;
     public function getQueryString(): string;
-    public function execute(array $params = null): bool|array|object;
+    public function execute(?array $params = null): bool|array|object;
 }
