@@ -20,6 +20,11 @@ abstract class AbstractFunction implements FunctionInterface
         $this->setTable($table);
     }
 
+    public function execute(?array $params = null): bool|array|object
+    {
+        return $this->getConnection()->execute($this->getQueryString(), $params);
+    }
+
     public function arguments(...$arguments): static
     {
         $this->arguments = [];
