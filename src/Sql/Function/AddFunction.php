@@ -16,7 +16,7 @@ class AddFunction extends AbstractFunction
         return $query;
     }
 
-    protected function buildScalar($value): int:float
+    protected function buildScalar($value): int|float
     {
         if (strpos($value, '.') === false) {
             return intval($value);
