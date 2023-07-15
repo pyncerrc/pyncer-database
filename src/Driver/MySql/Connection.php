@@ -1,5 +1,5 @@
 <?php
-namespace Pyncer\Database\Driver\MySQL;
+namespace Pyncer\Database\Driver\MySql;
 
 use Pyncer\Database\Driver;
 use Pyncer\Database\Exception\DatabaseException;
