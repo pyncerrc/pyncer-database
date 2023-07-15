@@ -33,6 +33,11 @@ class CaseWhenFunction implements FunctionInterface
         $this->setTable($table);
     }
 
+    public function execute(?array $params = null): bool|array|object
+    {
+        return $this->getConnection()->execute($this->getQueryString(), $params);
+    }
+
     public function case($column, $binary = false): static
     {
         $case = $this->buildConditionColumn($column);
@@ -125,5 +130,10 @@ class CaseWhenFunction implements FunctionInterface
         $query .= ' END';
 
         return $query;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getQueryString();
     }
 }
