@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.5 - 2023-07-15
+
+### Fixed
+
+- Fixed numerous issues with database function classes.
+- Fixed various improper capitalizations in namespaces.
+
 ## 1.0.4 - 2023-05-09
 
 ### Fixed
