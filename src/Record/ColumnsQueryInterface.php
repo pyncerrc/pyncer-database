@@ -1,5 +1,5 @@
 <?php
-namespace pyncer\database\Record;
+namespace Pyncer\Database\Record;
 
 use Pyncer\Database\Record\RecordQueryInterface;
 
