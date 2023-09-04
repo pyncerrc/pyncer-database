@@ -23,8 +23,9 @@ trait ConditionsQueryTrait
 
             if (is_array($value)) {
                 if ($not) {
-                    $where->not();
+                    $conditions->not();
                 }
+
                 $conditions->inArray(
                     $column,
                     $value,

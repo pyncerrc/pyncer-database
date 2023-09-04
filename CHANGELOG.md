@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.6 - 2023-09-03
+
+### Fixed
+
+- Fixed wrong variable name in ConditionsQueryTrait.
+- Fixed issue with 'not' conditions.
+
 ## 1.0.5 - 2023-07-15
 
 ### Fixed

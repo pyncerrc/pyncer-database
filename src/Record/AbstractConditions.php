@@ -309,8 +309,8 @@ abstract class AbstractConditions implements ConditionsInterface
         $this->conditions[] = [$type, $args];
 
         if ($this->inSingleNot) {
-            $this->notClose();
             $this->inSingleNot = false;
+            $this->notClose();
         }
 
         return $this;
