@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.7 - 2023-09-06
+
+### Fixed
+
+- Fixed wrong variable name in AbstractConnection::fetchValue().
+
 ## 1.0.6 - 2023-09-03
 
 ### Fixed

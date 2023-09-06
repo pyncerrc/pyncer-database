@@ -50,7 +50,7 @@ abstract class AbstractConnection implements
 
     public function fetchValue(object $result): mixed
     {
-        $row = $this->fetchIndexed($reuslt);
+        $row = $this->fetchIndexed($result);
 
         if ($row !== null) {
             return $row[0];
