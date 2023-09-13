@@ -71,6 +71,7 @@ class Conditions extends AbstractConditions
                 'dateTimeMinute' => $this->buildDateTimePartCondition('MINUTE', ...$value[1]),
                 'dateTimeSecond' => $this->buildDateTimePartCondition('SECOND', ...$value[1]),
                 'yearsAgo' => $this->buildYearsAgoCondition(...$value[1]),
+                'columnCompare' => $this->buildColumnCompareCondition(...$value[1]),
             };
         }
 

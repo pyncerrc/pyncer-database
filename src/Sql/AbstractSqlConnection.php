@@ -42,10 +42,10 @@ abstract class AbstractSqlConnection extends AbstractConnection
     use BuildScalarTrait;
     use BuildTableTrait;
 
-    protected $time;
+    protected int $time;
     protected int $queryExecutionCount = 0;  // The number of queries that have been executed
     protected ?string $lastQuery = null;
-    protected $transactionCount = 0; // Track nested transactions
+    protected int $transactionCount = 0; // Track nested transactions
 
     private string $connectionId;
     private static int $counter = 0;
@@ -57,7 +57,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
         $this->connectionId = $driver->getName() . '_' . ++self::$counter;
 
         // Lets keep time consistant accross requests
-        $this->time = $driver->getParam('time', PYNCER_NOW);
+        $this->time = intval($driver->getParam('time', PYNCER_NOW));
 
         $this->setCharacterSet($driver->getParam('character_set', $this->getDefaultCharacterSet()));
         $this->setCollation($driver->getParam('collation', $this->getDefaultCollation()));
@@ -129,7 +129,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
     ): string
     {
         if ($dateTime === -1) {
-            $dateTime = '@' . $this->time;
+            $dateTime = $this->time;
         }
 
         $dateTime = pyncer_date_time($dateTime, $local);
@@ -214,10 +214,10 @@ abstract class AbstractSqlConnection extends AbstractConnection
         $driverName = $this->getDriver()->getName();
 
         $file = dirname(__DIR__) . DS .
-            'driver' . DS .
+            'Driver' . DS .
             $driverName . DS .
-            'functions' . DS .
-            $function . '.php';
+            'Function' . DS .
+            $function . 'Function.php';
 
         if (file_exists($file)) {
             $class = '\Pyncer\Database\Driver\\' . $driverName .
@@ -226,8 +226,8 @@ abstract class AbstractSqlConnection extends AbstractConnection
         }
 
         $file = __DIR__ . DS .
-            'functions' . DS .
-            $function . '.php';
+            'Function' . DS .
+            $function . 'Function.php';
 
         if (file_exists($file)) {
             $class = '\Pyncer\Database\Sql\Function\\' . $function . 'Function';

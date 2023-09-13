@@ -304,6 +304,16 @@ abstract class AbstractConditions implements ConditionsInterface
         return $this->addCondition('yearsAgo', func_get_args());
     }
 
+    public function columnCompare(
+        mixed $column,
+        mixed $value,
+        string $operator = '=',
+        bool $caseSensitive = false
+    ): static
+    {
+        return $this->addCondition('columnCompare', func_get_args());
+    }
+
     private function addCondition(string $type, array $args): static
     {
         $this->conditions[] = [$type, $args];

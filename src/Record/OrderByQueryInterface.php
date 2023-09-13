@@ -7,4 +7,5 @@ use Pyncer\Database\Record\RecordQueryInterface;
 interface OrderByQueryInterface extends RecordQueryInterface
 {
     public function orderBy(null|string|array|FunctionInterface ...$columns): static;
+    public function hasOrderBy(): bool;
 }

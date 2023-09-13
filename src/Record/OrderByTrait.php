@@ -45,12 +45,15 @@ trait OrderByTrait
                         $column[1] = 'desc';
                     }
 
-                    /*if ($column[0] === null) {
-                        throw new InvalidArgumentException();
-                    }*/
-
-                    if ($column[0] === '@') {
+                    if ($column[0] === null || $column[0] === '@') {
                         if (in_array($column[1], ['asc', 'desc'], true)) {
+                            throw new InvalidArgumentException();
+                        }
+
+                        // For consistancy
+                        if ($column[0] !== '@' &&
+                            $column[1] instanceof FunctionInterface
+                        ) {
                             throw new InvalidArgumentException();
                         }
 
@@ -74,7 +77,9 @@ trait OrderByTrait
                         $column[2] = 'desc';
                     }
 
-                    if ($column[0] !== '@' && $column[1] instanceof FunctionInterface) {
+                    if ($column[0] !== '@' &&
+                        $column[1] instanceof FunctionInterface
+                    ) {
                         throw new InvalidArgumentException();
                     }
 
@@ -94,5 +99,10 @@ trait OrderByTrait
         }
 
         return $this;
+    }
+
+    public function hasOrderBy(): bool
+    {
+        return (count($this->orderBys) === 0);
     }
 }

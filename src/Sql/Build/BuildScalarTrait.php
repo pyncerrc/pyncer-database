@@ -1,6 +1,8 @@
 <?php
 namespace Pyncer\Database\Sql\Build;
 
+use DateTime;
+
 trait BuildScalarTrait
 {
     private function buildScalar(mixed $value): string
@@ -15,6 +17,10 @@ trait BuildScalarTrait
 
         if (is_bool($value)) {
             return ($value ? "'1'" : "'0'");
+        }
+
+        if ($value instanceof DateTime) {
+            $value = $this->getConnection()->dateTime($value);
         }
 
         return "'" . $this->getConnection()->escapeString($value) . "'";

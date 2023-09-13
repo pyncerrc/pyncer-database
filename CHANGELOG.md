@@ -1,5 +1,19 @@
 # Change Log
 
+## 1.1.0 - Unreleased
+
+### Added
+
+- Added support for DateTime objects when specifying values and conditionals.
+- Added support for comparing columns in conditionals.
+- Added support for using select queries as columns.
+- Added hasGroupBy and hasOrderBy functions to select queries.
+
+### Fixed
+
+- Fixed issues with function pathing.
+- Added missing types on various class properties.
+
 ## 1.0.7 - 2023-09-06
 
 ### Fixed

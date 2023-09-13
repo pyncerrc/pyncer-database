@@ -8,6 +8,7 @@ use Pyncer\Database\Exception\ResultException;
 use Pyncer\Database\Sql\AbstractSqlConnection;
 use Pyncer\Exception\InvalidArgumentException;
 use Pyncer\Exception\UnexpectedValueException;
+use mysqli;
 use mysqli_result;
 use mysqli_sql_exception;
 
@@ -20,7 +21,7 @@ use const MYSQLI_REPORT_STRICT;
 
 class Connection extends AbstractSqlConnection
 {
-    protected $mysql;
+    protected ?mysqli $mysql;
 
     public function __construct(Driver $driver)
     {

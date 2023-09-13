@@ -16,7 +16,7 @@ abstract class AbstractConnection implements
     use EncodingTrait;
     use EngineTrait;
 
-    protected $prefix; // Current prefix to prepend to table names
+    protected string $prefix; // Current prefix to prepend to table names
 
     public function __construct(protected Driver $driver)
     {

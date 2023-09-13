@@ -46,5 +46,7 @@ interface ConditionsInterface extends Stringable
     public function dateTimeSecond(mixed $column, ?int $second = null, string $operator = '='): static;
     public function yearsAgo(mixed $column, mixed $value, string $operator = '='): static;
 
+    public function columnCompare(mixed $column, mixed $value, string $operator = '=', bool $caseSensitive = false): static;
+
     public function getQueryString(): string;
 }

@@ -22,7 +22,10 @@ trait BuildOrderByTrait
                     $orderByQueries[] = $this->buildColumn($value[1]) .
                         ' ' . strtoupper($value[2]);
                 }
-            } else {
+            } elseif ($value[0] === null) {
+                $orderByQueries[] = $this->buildColumn($value[1]) .
+                    ' ' . strtoupper($value[2]);
+            } else{
                 $orderByQueries[] = $this->buildTable($value[0]) .
                     '.' .
                     $this->buildColumn($value[1]) .

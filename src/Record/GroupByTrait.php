@@ -1,6 +1,7 @@
 <?php
 namespace Pyncer\Database\Record;
 
+use Pyncer\Database\Record\OrderByQueryInterface;
 use Pyncer\Exception\InvalidArgumentException;
 
 trait GroupByTrait
@@ -31,10 +32,17 @@ trait GroupByTrait
         }
 
         // Automatically optimize order by for group by
-        if (!$this->orderBys) {
+        if ($this instanceof OrderByQueryInterface &&
+            !$this->hasOrderBy()
+        ) {
             $this->orderBy(null);
         }
 
         return $this;
+    }
+
+    public function hasGroupBy(): bool
+    {
+        return (count($this->groupBys) === 0);
     }
 }

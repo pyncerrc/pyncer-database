@@ -2,6 +2,7 @@
 namespace Pyncer\Database\Record;
 
 use Pyncer\Database\Function\FunctionInterface;
+use Pyncer\Database\Record\SelectQueryInterface;
 use Pyncer\Exception\InvalidArgumentException;
 
 trait ColumnsTrait
@@ -30,14 +31,21 @@ trait ColumnsTrait
                         throw new InvalidArgumentException();
                     }
 
-                    if ($column[0] instanceof FunctionInterface) {
+                    if ($column[0] instanceof FunctionInterface ||
+                        $column[0] instanceof SelectQueryInterface
+                    ) {
                         $this->columns[] = ['@', $column[0], $column[1]];
                     } else {
                         $this->columns[] = [$column[0], $column[1], null];
                     }
                     break;
                 case 3:
-                    if ($column[0] !== '@' && $column[1] instanceof FunctionInterface) {
+                    if ($column[0] !== '@' &&
+                        (
+                            $column[1] instanceof FunctionInterface ||
+                            $column[1] instanceof SelectQueryInterface
+                        )
+                    ) {
                         throw new InvalidArgumentException();
                     }
 

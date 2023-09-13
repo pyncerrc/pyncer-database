@@ -15,7 +15,6 @@ trait BuildConditionsTrait
     ): string
     {
         $column = $this->buildConditionColumn($column);
-
         if ($caseSensitive) {
             $column = 'BINARY ' . $column;
         }
@@ -285,5 +284,22 @@ trait BuildConditionsTrait
         $age = 'DATE_FORMAT(NOW(), \'%Y\') - DATE_FORMAT(' . $column . ', \'%Y\') - (DATE_FORMAT(NOW(), \'00-%m-%d\') < DATE_FORMAT(' . $column . ', \'00-%m-%d\'))';
 
         return $age . ' ' . $operator . ' \'' . $this->getConnection()->escapeString($value) . '\'';
+    }
+
+    protected function buildColumnCompareCondition(
+        mixed $column1,
+        mixed $column2,
+        string $operator = '=',
+        bool $caseSensitive = false
+    ): string
+    {
+        $column1 = $this->buildConditionColumn($column1);
+        if ($caseSensitive) {
+            $column1 = 'BINARY ' . $column1;
+        }
+
+        $column2 = $this->buildConditionColumn($column2);
+
+        return $column . ' ' . $operator . ' ' . $value;
     }
 }
