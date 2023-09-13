@@ -43,6 +43,10 @@ trait GroupByTrait
 
     public function hasGroupBy(): bool
     {
-        return (count($this->groupBys) === 0);
+        if ($this->groupBys === null) {
+            return false;
+        }
+
+        return (count($this->groupBys) > 0);
     }
 }

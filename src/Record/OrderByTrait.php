@@ -103,6 +103,10 @@ trait OrderByTrait
 
     public function hasOrderBy(): bool
     {
-        return (count($this->orderBys) === 0);
+        if ($this->orderBys === null) {
+            return false;
+        }
+
+        return (count($this->orderBys) > 0);
     }
 }
