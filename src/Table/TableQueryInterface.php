@@ -25,30 +25,30 @@ interface TableQueryInterface extends
     * Adds an integer column to the table that is set to be the primary key
     * and auto increment.
     *
-    * @param string $columnName The name of the column
-    * @param int $size The size of the integer
+    * @param string $columnName The name of the column.
+    * @param int $size The size of the integer.
     */
     public function serial(string $columnName): static;
 
     /**
-    * Adds an integer column to the table
+    * Adds an integer column to the table.
     *
-    * @param string $columnName The name of the column
-    * @param int $size The size of the integer
+    * @param string $columnName The name of the column.
+    * @param int $size The size of the integer.
     */
     public function int(string $columnName, IntSize $size = IntSize::LARGE): static;
 
     /**
-    * Adds a double column to the table
+    * Adds a double column to the table.
     *
-    * @param string $columnName The name of the column
+    * @param string $columnName The name of the column.
     */
     public function float(string $columnName, FloatSize $size = FloatSize::DOUBLE): static;
 
     /**
-    * Adds a decimal column to the table
+    * Adds a decimal column to the table.
     *
-    * @param string $columnName The name of the column
+    * @param string $columnName The name of the column.
     */
     public function decimal(
         string $columnName,
@@ -57,62 +57,62 @@ interface TableQueryInterface extends
     ): static;
 
     /**
-    * Adds a char column to the table
+    * Adds a char column to the table.
     *
-    * @param string $columnName The name of the column
-    * @param int $length The length in characters of the column
+    * @param string $columnName The name of the column.
+    * @param int $length The length in characters of the column.
     */
     public function char(string $columnName, int $length): static;
 
     /**
-    * Adds a string column to the table
+    * Adds a string column to the table.
     *
-    * @param string $columnName The name of the column
-    * @param int $length The max length in characters of the column
+    * @param string $columnName The name of the column.
+    * @param int $length The max length in characters of the column.
     */
     public function string(string $columnName, int $length = 250): static;
 
     /**
-    * Adds a text column to the table
+    * Adds a text column to the table.
     *
-    * @param mixed $columnName The name of the column
-    * @param int $size The size of the text
+    * @param mixed $columnName The name of the column.
+    * @param int $size The size of the text.
     */
     public function text(string $columnName, TextSize $size = TextSize::SMALL): static;
 
     /**
-    * Adds a date column to the table
+    * Adds a date column to the table.
     *
-    * @param string $columnName The name of the column
+    * @param string $columnName The name of the column.
     */
     public function date(string $columnName): static;
 
     /**
-    * Adds a time column to the table
+    * Adds a time column to the table.
     *
-    * @param string $columnName The name of the column
+    * @param string $columnName The name of the column.
     */
     public function time(string $columnName, int $precision = 0): static;
 
     /**
-    * Adds a datetime column to the table
+    * Adds a datetime column to the table.
     *
-    * @param string $columnName The name of the column
+    * @param string $columnName The name of the column.
     */
     public function dateTime(string $columnName, int $precision = 0): static;
 
     /**
-    * Adds a boolean column to the table
+    * Adds a boolean column to the table.
     *
-    * @param string $columnName The name of the column
+    * @param string $columnName The name of the column.
     */
     public function bool(string $columnName): static;
 
     /**
-    * Adds an enum column to the table
+    * Adds an enum column to the table.
     *
-    * @param string $columnName The name of the column
-    * @param array $values The enum values
+    * @param string $columnName The name of the column.
+    * @param array $values The enum values.
     */
     public function enum(string $columnName, array $values): static;
 

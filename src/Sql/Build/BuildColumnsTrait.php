@@ -16,10 +16,10 @@ trait BuildColumnsTrait
 
         foreach ($this->columns as $value) {
             if ($value[0] === '@') {
-                if ($value[1] instanceof FunctionInterface ||
-                    $value[1] instanceof SelectQueryInterface
-                ) {
+                if ($value[1] instanceof FunctionInterface) {
                     $column = $value[1]->getQueryString();
+                } elseif ($value[1] instanceof SelectQueryInterface) {
+                    $column = '(' . $value[1]->getQueryString() . ')';
                 } else {
                     $column = $this->buildColumn($value[1]);
                 }

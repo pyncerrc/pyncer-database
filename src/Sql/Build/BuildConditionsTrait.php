@@ -300,6 +300,6 @@ trait BuildConditionsTrait
 
         $column2 = $this->buildConditionColumn($column2);
 
-        return $column . ' ' . $operator . ' ' . $value;
+        return $column1 . ' ' . $operator . ' ' . $column2;
     }
 }
