@@ -4,6 +4,9 @@ namespace Pyncer\Database;
 use Countable;
 use Iterator;
 
+/**
+ * @extends Iterator<int, array>
+ */
 interface QueryResultInterface extends Iterator, Countable
 {
     public function getRow(): ?array;

@@ -1,7 +1,6 @@
 <?php
 namespace Pyncer\Database;
 
-use Pyncer as p;
 use Pyncer\Database\ConnectionTrait;
 use Pyncer\Database\QueryResultInterface;
 use Pyncer\Database\Record\SelectQueryInterface;
@@ -81,19 +80,19 @@ class QueryResult implements QueryResultInterface
         $this->currentCount = $this->connection->numRows($this->result);
 
         $this->currentRow = $this->connection->fetch($this->result);
-        if (!$this->currentRow) {
+        if ($this->currentRow === null) {
             $this->endOfQuery = true;
         }
     }
 
     #[\ReturnTypeWillChange]
-    public function current()
+    public function current(): ?array
     {
         return $this->currentRow;
     }
 
     #[\ReturnTypeWillChange]
-    public function key()
+    public function key(): int
     {
         return $this->currentOffset;
     }
@@ -132,9 +131,7 @@ class QueryResult implements QueryResultInterface
 
     public function count(): int
     {
-        if (!$this->rewound) {
-            $this->rewind();
-        }
+        $this->rewind();
 
         return $this->currentCount;
     }

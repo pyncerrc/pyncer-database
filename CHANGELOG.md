@@ -13,6 +13,7 @@
 
 - Fixed issues with function pathing.
 - Added missing types on various class properties.
+- Added missing $local parameter on ConnectionInterface date functions.
 
 ## 1.0.7 - 2023-09-06
 

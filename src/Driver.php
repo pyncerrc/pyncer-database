@@ -1,7 +1,6 @@
 <?php
 namespace Pyncer\Database;
 
-use Pyncer as p;
 use Pyncer\Database\ConnectionInterface;
 use Pyncer\Database\Exception\DriverNotFoundException;
 use Pyncer\Exception\InvalidArgumentException;

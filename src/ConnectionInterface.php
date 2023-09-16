@@ -25,9 +25,9 @@ interface ConnectionInterface
     public function getPrefix(): string;
     public function setPrefix(string $value): static;
 
-    public function date(mixed $dateTime = -1): string;
-    public function time(mixed $dateTime = -1): string;
-    public function dateTime(mixed $dateTime = -1): string;
+    public function date(mixed $dateTime = -1, bool $local = false): string;
+    public function time(mixed $dateTime = -1, bool $local = false): string;
+    public function dateTime(mixed $dateTime = -1, bool $local = false): string;
 
     public function getQueryExecutionCount(): int;
     public function getLastQuery(): ?string;
