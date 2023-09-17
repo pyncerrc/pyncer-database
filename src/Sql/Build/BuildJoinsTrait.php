@@ -3,7 +3,7 @@ namespace Pyncer\Database\Sql\Build;
 
 trait BuildJoinsTrait
 {
-    private function buildJoins(array $joins): string
+    protected function buildJoins(array $joins): string
     {
         $query = '';
 

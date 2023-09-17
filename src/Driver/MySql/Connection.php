@@ -43,6 +43,7 @@ class Connection extends AbstractSqlConnection
             }
         }
 
+        /** @var array<string, null|string> **/
         $ssl = $driver->getArray('ssl');
         $ssl = pyncer_array_unset_null($ssl);
         $ssl = pyncer_array_intersect_keys(

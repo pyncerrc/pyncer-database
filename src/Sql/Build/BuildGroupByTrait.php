@@ -3,7 +3,7 @@ namespace Pyncer\Database\Sql\Build;
 
 trait BuildGroupByTrait
 {
-    private function buildGroupBy(array $groupBys): string
+    protected function buildGroupBy(array $groupBys): string
     {
         $query = " GROUP BY ";
 

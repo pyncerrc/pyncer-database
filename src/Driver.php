@@ -13,10 +13,10 @@ final class Driver extends Params
 {
     public function __construct(
         string $name,
+        ?string $host,
+        ?string $username,
+        ?string $password,
         string $database,
-        ?string $host = null,
-        ?string $username = null,
-        ?string $password = null,
         string $prefix = '',
         array $params = []
     ) {

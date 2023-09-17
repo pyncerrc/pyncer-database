@@ -1,0 +1,50 @@
+parameters:
+    checkMissingIterableValueType: false
+    level: max
+    paths:
+        - src
+    ignoreErrors:
+        -
+            message: "#^Parameter \\#7 \\$flags of method mysqli::real_connect\\(\\) expects int, int\\|null given\\.$#"
+            count: 1
+            path: src/Driver/MySql/Connection.php
+        -
+            message: "#^Strict comparison using === between array<string, string>\\|null and false will always evaluate to false\\.$#"
+            count: 1
+            path: src/Driver/MySql/Connection.php
+        -
+            message: "#^Strict comparison using === between array\\|null and false will always evaluate to false\\.$#"
+            count: 1
+            path: src/Driver/MySql/Connection.php
+        -
+            message: "#^Used constant Pyncer\\\\NOW not found\\.$#"
+            count: 1
+            path: src/Sql/AbstractSqlConnection.php
+        -
+            message: "#^Constant Pyncer\\\\NOW not found\\.$#"
+            count: 1
+            path: src/Sql/AbstractSqlConnection.php
+        -
+            message: "#^Property Pyncer\\\\Database\\\\Sql\\\\AbstractSqlConnection::\\$time \\(int\\) does not accept int\\|null\\.$#"
+            count: 1
+            path: src/Sql/AbstractSqlConnection.php
+        -
+            message: "#^Parameter \\#1 \\$value of method Pyncer\\\\Database\\\\AbstractConnection::setCharacterSet\\(\\) expects string, string\\|null given\\.$#"
+            count: 1
+            path: src/Sql/AbstractSqlConnection.php
+        -
+            message: "#^Parameter \\#1 \\$value of method Pyncer\\\\Database\\\\AbstractConnection::setCollation\\(\\) expects string, string\\|null given\\.$#"
+            count: 1
+            path: src/Sql/AbstractSqlConnection.php
+        -
+            message: "#^Parameter \\#1 \\$value of method Pyncer\\\\Database\\\\AbstractConnection::setEngine\\(\\) expects string, string\\|null given\\.$#"
+            count: 1
+            path: src/Sql/AbstractSqlConnection.php
+        -
+            message: "#^Parameter \\#2 \\$name of static method Pyncer\\\\Database\\\\Table\\\\AbstractIndexQuery::fromTableQuery\\(\\) expects string, int\\|string given\\.$#"
+            count: 1
+            path: src/Sql/Table/AlterTableQuery.php
+        -
+            message: "#^Parameter \\#2 \\$name of static method Pyncer\\\\Database\\\\Table\\\\AbstractForeignKeyQuery::fromTableQuery\\(\\) expects string, int\\|string given\\.$#"
+            count: 1
+            path: src/Sql/Table/AlterTableQuery.php

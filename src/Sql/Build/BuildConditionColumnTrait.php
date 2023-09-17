@@ -6,7 +6,7 @@ use Pyncer\Exception\InvalidArgumentException;
 
 trait BuildConditionColumnTrait
 {
-    private function buildConditionColumn(mixed $column): string
+    protected function buildConditionColumn(mixed $column): string
     {
         if (is_array($column)) {
             if ($column[0] == '@') {

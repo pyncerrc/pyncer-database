@@ -172,6 +172,7 @@ class QueryResult implements QueryResultInterface
 
         if ($reset) {
             $this->rewound = false;
+            $this->result = null;
         }
 
         return $row;

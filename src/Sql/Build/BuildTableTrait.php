@@ -3,7 +3,7 @@ namespace Pyncer\Database\Sql\Build;
 
 trait BuildTableTrait
 {
-    private function buildTable(?string $table, bool $asValue = false): string
+    protected function buildTable(?string $table, bool $asValue = false): string
     {
         if ($table === null) {
             return '';

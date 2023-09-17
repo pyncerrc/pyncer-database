@@ -6,7 +6,7 @@ use Pyncer\Database\Record\SelectQueryInterface;
 
 trait BuildColumnsTrait
 {
-    private function buildColumns(array $columns): string
+    protected function buildColumns(array $columns): string
     {
         if (!$columns) {
             return ' ' . $this->buildTable($this->getTable()) . ".*";

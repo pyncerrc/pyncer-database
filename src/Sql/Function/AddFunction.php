@@ -18,10 +18,10 @@ class AddFunction extends AbstractFunction
         return $query;
     }
 
-    protected function buildScalar(mixed $value): int|float
+    protected function buildScalar(mixed $value): string
     {
         if (is_int($value) || is_float($value)) {
-            return $value;
+            return strval($value);
         }
 
         if (is_scalar($value) || $value instanceof Stringable) {
@@ -31,9 +31,9 @@ class AddFunction extends AbstractFunction
         }
 
         if (strpos($value, '.') === false) {
-            return intval($value);
+            return strval(intval($value));
         }
 
-        return floatval($value);
+        return strval(floatval($value));
     }
 }

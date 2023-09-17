@@ -5,7 +5,7 @@ use Pyncer\Database\Function\FunctionInterface;
 
 trait BuildOrderByTrait
 {
-    private function buildOrderBy(array $orderBys): string
+    protected function buildOrderBy(array $orderBys): string
     {
         $query = " ORDER BY ";
 

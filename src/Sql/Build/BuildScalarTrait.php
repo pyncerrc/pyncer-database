@@ -7,7 +7,7 @@ use Stringable;
 
 trait BuildScalarTrait
 {
-    private function buildScalar(mixed $value): string
+    protected function buildScalar(mixed $value): string
     {
         if ($value === null) {
             return 'NULL';
