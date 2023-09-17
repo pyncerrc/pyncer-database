@@ -14,7 +14,7 @@ use mysqli_sql_exception;
 
 use function mysqli_report;
 use function Pyncer\Array\unset_null as pyncer_array_unset_null;
-use function Pyncer\Array\ensure_keys as pyncer_array_ensure_keys;
+use function Pyncer\Array\intersect_keys as pyncer_array_intersect_keys;
 use function Pyncer\stringify as pyncer_stringify;
 
 use const MYSQLI_REPORT_ERROR;
@@ -45,22 +45,18 @@ class Connection extends AbstractSqlConnection
 
         $ssl = $driver->getArray('ssl');
         $ssl = pyncer_array_unset_null($ssl);
+        $ssl = pyncer_array_intersect_keys(
+            $ssl,
+            ['key', 'cert', 'ca', 'capath', 'cipher'],
+        );
         if ($ssl) {
-            $ssl = pyncer_array_ensure_keys(
-                $ssl,
-                ['key', 'cert', 'ca', 'capath', 'cipher'],
-                null
-            );
-
             $this->mysql->ssl_set(
-                $ssl['key'],
-                $ssl['cert'],
-                $ssl['ca'],
-                $ssl['capath'],
-                $ssl['cipher']
+                $ssl['key'] ?? null,
+                $ssl['cert'] ?? null,
+                $ssl['ca'] ?? null,
+                $ssl['capath'] ?? null,
+                $ssl['cipher'] ?? null
             );
-        } else {
-            throw new UnexpectedValueException('SSL param is invalid.');
         }
 
         try {
