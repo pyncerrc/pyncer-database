@@ -5,7 +5,7 @@ use Pyncer\Database\Sql\Function\AbstractFunction;
 
 class CountFunction extends AbstractFunction
 {
-    protected $distinct;
+    protected bool $distinct;
 
     public function distinct(): static
     {

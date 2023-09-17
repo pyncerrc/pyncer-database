@@ -1,6 +1,8 @@
 <?php
 namespace Pyncer\Database\Sql\Table\Column;
 
+use Pyncer\Database\Exception\ColumnExistsException;
+use Pyncer\Database\Exception\ColumnNotFoundException;
 use Pyncer\Database\EncodingInterface;
 use Pyncer\Database\Sql\Build\BuildColumnTrait;
 use Pyncer\Database\Sql\Build\BuildTableTrait;
@@ -16,7 +18,7 @@ trait ColumnQueryStringTrait
     use BuildTableTrait;
     use BuildScalarTrait;
 
-    abstract public function buildType();
+    abstract public function buildType(): string;
 
     public function getQueryString(): string
     {

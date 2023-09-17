@@ -12,9 +12,9 @@ use function array_unique;
 abstract class AbstractEnumColumnQuery extends AbstractColumnQuery implements
     EnumColumnQueryInterface
 {
-    private $values;
+    private array $values;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,
@@ -29,7 +29,8 @@ abstract class AbstractEnumColumnQuery extends AbstractColumnQuery implements
         TableQueryInterface $query,
         string $name,
         array $values,
-    ) {
+    ): static
+    {
         $column = new static(
             $query->getConnection(),
             $query->getTable(),

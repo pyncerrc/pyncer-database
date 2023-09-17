@@ -8,7 +8,7 @@ class TimeColumnQuery extends AbstractTimeColumnQuery
 {
     use ColumnQueryStringTrait;
 
-    public function buildType()
+    public function buildType(): string
     {
         if ($this->getPrecision() > 0) {
             return 'TIME(' . $this->getPrecision() . ')';

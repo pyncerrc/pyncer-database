@@ -1,6 +1,7 @@
 <?php
 namespace Pyncer\Database\Table;
 
+use Pyncer\Database\Exception\TableExistsException;
 use Pyncer\Database\Table\AbstractTableQuery;
 use Pyncer\Database\Table\CreateTableQueryInterface;
 

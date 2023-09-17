@@ -13,37 +13,40 @@ use mysqli_result;
 use mysqli_sql_exception;
 
 use function mysqli_report;
-use function Pyncer\Array\unset_null;
-use function Pyncer\Array\ensure_keys;
+use function Pyncer\Array\unset_null as pyncer_array_unset_null;
+use function Pyncer\Array\ensure_keys as pyncer_array_ensure_keys;
+use function Pyncer\stringify as pyncer_stringify;
 
 use const MYSQLI_REPORT_ERROR;
 use const MYSQLI_REPORT_STRICT;
 
 class Connection extends AbstractSqlConnection
 {
-    protected ?mysqli $mysql;
+    protected mysqli $mysql;
 
     public function __construct(Driver $driver)
     {
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-        $this->mysql = mysqli_init();
-        if (!$this->mysql) {
+        $mysql = mysqli_init();
+
+        if ($mysql === false) {
             throw new DatabaseException('MySql could not be initialized.');
         }
 
-        $options = $driver->getParam('options');
+        $this->mysql = $mysql;
+
+        $options = $driver->getArray('options', null);
         if (is_array($options)) {
             foreach ($options as $key => $value) {
                 $this->mysql->options($key, $value);
             }
-        } elseif ($options !== null) {
-            throw new UnexpectedValueException('Options param is invalid.');
         }
 
-        $ssl = $driver->getParam('ssl');
-        if (is_array($ssl) && unset_null($ssl)) {
-            $ssl = ensure_keys(
+        $ssl = $driver->getArray('ssl');
+        $ssl = pyncer_array_unset_null($ssl);
+        if ($ssl) {
+            $ssl = pyncer_array_ensure_keys(
                 $ssl,
                 ['key', 'cert', 'ca', 'capath', 'cipher'],
                 null
@@ -56,29 +59,33 @@ class Connection extends AbstractSqlConnection
                 $ssl['capath'],
                 $ssl['cipher']
             );
+        } else {
+            throw new UnexpectedValueException('SSL param is invalid.');
         }
 
         try {
             $host = $driver->getHost();
-            if ($host !== null) {
+            if ($host === null) {
+                $host = null;
+                $port = null;
+            } else {
                 if (strpos($host, ':') !== false) {
                     list($host, $port) = explode(':', $host, 2);
+                    $port = intval($port) ?: null;
                 } else {
                     $port = null;
                 }
-
-                $connected = $this->mysql->real_connect(
-                    $host,
-                    $driver->getUsername(),
-                    $driver->getPassword(),
-                    $driver->getDatabase(),
-                    $port,
-                    $driver->getParam('socket'),
-                    $driver->getParam('flags', 0)
-                );
-            } else {
-                $connected = $this->mysql->real_connect($this->mysql);
             }
+
+            $this->mysql->real_connect(
+                $host,
+                $driver->getUsername(),
+                $driver->getPassword(),
+                $driver->getDatabase(),
+                $port,
+                $driver->getString('socket', null),
+                $driver->getInt('flags', 0)
+            );
         } catch (mysqli_sql_exception $e) {
             $this->mysql->close();
             unset($this->mysql);
@@ -86,11 +93,11 @@ class Connection extends AbstractSqlConnection
             throw new DatabaseException('MySql could not connect to database.', 0, $e);
         }
 
-        $sqlMode = $driver->getParam('sql_mode');
+        $sqlMode = $driver->get('sql_mode');
         if (is_array($sqlMode)) {
             $sqlMode = implode(',', $sqlMode);
         } else {
-            $sqlMode = strval($sqlMode);
+            $sqlMode = pyncer_stringify($sqlMode) ?? '';
         }
         $sqlMode = trim($sqlMode);
 
@@ -114,18 +121,11 @@ class Connection extends AbstractSqlConnection
         return 'InnoDB';
     }
 
-    public function connected(): bool
-    {
-        return ($this->mysql ? true : false);
-    }
     public function close(): bool
     {
-        if ($this->mysql) {
-            return $this->mysql->close();
-        }
-
-        return false;
+        return $this->mysql->close();
     }
+
     public function error(): array
     {
         return [
@@ -222,7 +222,7 @@ class Connection extends AbstractSqlConnection
         return $row;
     }
 
-    public function seek($result, int $offset): bool
+    public function seek(object $result, int $offset): bool
     {
         if (!$result instanceof mysqli_result) {
             throw new InvalidArgumentException('Expected mysqli_result.');
@@ -230,15 +230,22 @@ class Connection extends AbstractSqlConnection
 
         return $result->data_seek($offset);
     }
-    public function numRows($result): int|string
+    public function numRows(object $result): int
     {
         if (!$result instanceof mysqli_result) {
             throw new InvalidArgumentException('Expected mysqli_result.');
         }
 
-        return $result->num_rows;
+        $result = $result->num_rows;
+
+        // Unlikely this will come up and supporting it adds needless complexity.
+        if (is_string($result)) {
+            throw new ResultException('The value is larger than PHP_INT_MAX.');
+        }
+
+        return $result;
     }
-    public function free($result): bool
+    public function free(object $result): bool
     {
         if (!$result instanceof mysqli_result) {
             throw new InvalidArgumentException('Expected mysqli_result.');
@@ -247,13 +254,14 @@ class Connection extends AbstractSqlConnection
         $result->free();
         return true;
     }
-    public function affectedRows(): int|string
+    public function affectedRows(): int
     {
-        if (!$this->mysql) {
-            throw new UnexpectedValueException('MySql not initialized.');
-        }
-
         $result = $this->mysql->affected_rows;
+
+        // Unlikely this will come up and supporting it adds needless complexity.
+        if (is_string($result)) {
+            throw new ResultException('The value is larger than PHP_INT_MAX.');
+        }
 
         if ($result < 0) {
             throw new ResultException('Affected rows could not be determined.');
@@ -263,11 +271,12 @@ class Connection extends AbstractSqlConnection
     }
     public function insertId(): int
     {
-        if (!$this->mysql) {
-            throw new UnexpectedValueException('MySql not initialized.');
-        }
-
         $result = $this->mysql->insert_id;
+
+        // Unlikely this will come up and supporting it adds needless complexity.
+        if (is_string($result)) {
+            throw new ResultException('The value is larger than PHP_INT_MAX.');
+        }
 
         if ($result === 0) {
             throw new ResultException('No last insert id.');

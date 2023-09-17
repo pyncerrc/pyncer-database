@@ -28,6 +28,7 @@ trait BuildColumnsTrait
                 $column = $this->buildScalar($value[1]);
             } elseif ($value[1] === '*') {
                 if ($value[2] !== null) {
+                    /** @var object **/
                     $result = $this->getConnection()->execute(sprintf(
                         "SELECT `COLUMN_NAME`
                         FROM `INFORMATION_SCHEMA`.`COLUMNS`

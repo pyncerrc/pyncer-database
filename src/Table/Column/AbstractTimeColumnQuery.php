@@ -5,18 +5,18 @@ use Pyncer\Database\ConnectionInterface;
 use Pyncer\Database\Table\Column\AbstractColumnQuery;
 use Pyncer\Database\Table\Column\TimeColumnQueryInterface;
 use Pyncer\Database\Table\TableQueryInterface;
+use Pyncer\Exception\InvalidArgumentException;
 
 abstract class AbstractTimeColumnQuery extends AbstractColumnQuery implements
     TimeColumnQueryInterface
 {
     private int $precision;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,
         int $precision = 0,
-        bool $autoUpdate = false,
     ) {
         parent::__construct($connection, $table, $name);
 

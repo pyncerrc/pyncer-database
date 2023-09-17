@@ -20,7 +20,11 @@ use Pyncer\Database\Sql\Table\Column\TextColumnQuery;
 use Pyncer\Database\Sql\Table\Column\TimeColumnQuery;
 use Pyncer\Database\Sql\Table\TableQueryTrait;
 use Pyncer\Database\Table\AbstractAlterTableQuery;
+use Pyncer\Database\Table\Column\BoolColumnQueryInterface;
+use Pyncer\Database\Table\Column\DateTimeColumnQueryInterface;
 use Pyncer\Database\Table\Column\IntColumnQueryInterface;
+use Pyncer\Database\Table\Column\FloatColumnQueryInterface;
+use Pyncer\Database\Table\Column\TimeColumnQueryInterface;
 use Pyncer\Database\Table\Column\IntSize;
 use Pyncer\Database\Table\Column\FloatSize;
 use Pyncer\Database\Table\Column\TextSize;
@@ -42,12 +46,13 @@ class AlterTableQuery extends AbstractAlterTableQuery
     use BuildTableTrait;
     use TableQueryTrait;
 
-    private $existingTableInformation;
+    private array $existingTableInformation;
 
     public function __construct(ConnectionInterface $connection, string $table)
     {
         parent::__construct($connection, $table);
 
+        /** @var object **/
         $result = $connection->execute(sprintf(
             "SELECT
                 `ENGINE`,
@@ -63,7 +68,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
             $this->buildScalar($this->buildTable($table, true)),
         ));
 
-        $this->existingTableInformation = $connection->fetch($result);
+        $this->existingTableInformation = $connection->fetch($result) ?? [];
     }
 
     protected function initializeExistingComment(): ?string
@@ -103,6 +108,8 @@ class AlterTableQuery extends AbstractAlterTableQuery
     protected function initializeExistingColumns(): array
     {
         $existing = [];
+
+        /** @var object **/
         $result = $this->getConnection()->execute(sprintf(
             "SELECT *
             FROM
@@ -336,6 +343,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
         $fulltext = [];
         $comment = [];
 
+        /** @var object **/
         $result = $this->getConnection()->execute(
             'SHOW INDEX FROM ' . $this->buildTable($this->getTable()) .
             "WHERE `Key_name` != 'PRIMARY'"
@@ -381,6 +389,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
         $referenceTable = [];
         $referenceColumns = [];
 
+        /** @var object **/
         $result = $this->getConnection()->execute(sprintf(
             "SELECT
                 `CONSTRAINT_NAME`,
@@ -400,7 +409,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
 
         while ($row = $this->getConnection()->fetch($result)) {
             $columns[$row['CONSTRAINT_NAME']][] = $row['COLUMN_NAME'];
-            $referenceTable[$row['CONSTRAINT_NAME']] = ($row['REFERENCED_TABLE_NAME'] ? true : false);
+            $referenceTable[$row['CONSTRAINT_NAME']] = $row['REFERENCED_TABLE_NAME'];
             $referenceColumns[$row['CONSTRAINT_NAME']][] = $row['REFERENCED_COLUMN_NAME'];
         }
 
@@ -414,6 +423,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
             $foreignKey->setReferenceTable($referenceTable[$key]);
             $foreignKey->setReferenceColumns($referenceColumns[$key]);
 
+            /** @var object **/
             $result2 = $this->getConnection()->execute(sprintf(
                 "SELECT
                     `DELETE_RULE`,
@@ -464,6 +474,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
     {
         $existing = [];
 
+        /** @var object **/
         $result = $this->getConnection()->execute(
             'SHOW INDEX FROM ' . $this->buildTable($this->getTable()) .
             "WHERE `Key_name` = 'PRIMARY'"
@@ -548,9 +559,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
 
         // Update primary key
         if ($this->primary !== $this->existingPrimary) {
-            $primary = array_map(function($value) {
-                return $this->buildColumn($primary);
-            }, $this->primary);
+            $primary = array_map($this->buildColumn(...), $this->primary);
             $primary = implode(', ', $primary);
 
             $queryParts[] = 'ADD PRIMARY KEY (' . $primary . ');';

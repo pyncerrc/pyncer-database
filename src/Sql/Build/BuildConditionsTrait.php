@@ -1,9 +1,11 @@
 <?php
 namespace Pyncer\Database\Sql\Build;
 
+use DateTimeInterface;
 use Pyncer\Exception\InvalidArgumentException;
 
-use function Pyncer\String\len;
+use function Pyncer\stringify as pyncer_stringify;
+use function Pyncer\String\len as pyncer_str_len;
 
 trait BuildConditionsTrait
 {
@@ -49,7 +51,14 @@ trait BuildConditionsTrait
             $column = 'BINARY ' . $column;
         }
 
-        $len = len($value) + len($separator);
+        $value = $this->getStringValue($value);
+
+        // Will never be true.
+        if ($value === '') {
+            return '1=2';
+        }
+
+        $len = pyncer_str_len($value) + pyncer_str_len($separator);
 
         $value = $this->getConnection()->escapeString($value);
 
@@ -115,7 +124,14 @@ trait BuildConditionsTrait
             $column = 'BINARY ' . $column;
         }
 
-        $len = len($value);
+        $value = $this->getStringValue($value);
+
+        // Will always be true.
+        if ($value === '') {
+            return '1=1';
+        }
+
+        $len = pyncer_str_len($value);
         $value = $this->buildScalar($value);
 
         return 'SUBSTRING(' . $column . ', 1, ' . $len . ') ' .
@@ -135,7 +151,14 @@ trait BuildConditionsTrait
             $column = 'BINARY ' . $column;
         }
 
-        $len = len($value);
+        $value = $this->getStringValue($value);
+
+        // Will always be true.
+        if ($value === '') {
+            return '1=1';
+        }
+
+        $len = pyncer_str_len($value);
         $value = $this->buildScalar($value);
 
         return 'SUBSTRING(' . $column . ', CHAR_LENGTH(' . $column . ') - CHAR_LENGTH(' . $value . ') + 1, ' . $len . ') ' .
@@ -149,6 +172,13 @@ trait BuildConditionsTrait
     ): string
     {
         $column = $this->buildConditionColumn($column);
+
+        $value = $this->getStringValue($value);
+
+        // Will always be true.
+        if ($value === '') {
+            return '1=1';
+        }
 
         $value = $this->escapeWildCards($value);
         $value = $this->getConnection()->escapeString($value);
@@ -168,6 +198,13 @@ trait BuildConditionsTrait
     ): string
     {
         $column = $this->buildConditionColumn($column);
+
+        $value = $this->getStringValue($value);
+
+        // Will never be true.
+        if ($value === '') {
+            return '1=2';
+        }
 
         $value = $this->escapeWildCards($value);
         $value = str_replace('*', '%', $value);
@@ -190,7 +227,7 @@ trait BuildConditionsTrait
         );
     }
 
-    protected function buildBitCondition(mixed $column, int $mask): static
+    protected function buildBitCondition(mixed $column, int $mask): string
     {
         $column = $this->buildConditionColumn($column);
 
@@ -199,9 +236,9 @@ trait BuildConditionsTrait
 
     protected function buildDateCompareCondition(
         mixed $column,
-        $date,
+        mixed $date,
         string $operator = '='
-    ): static
+    ): string
     {
         $column = $this->buildConditionColumn($column);
 
@@ -213,9 +250,9 @@ trait BuildConditionsTrait
 
     protected function buildDateBetweenCondition(
         mixed $column,
-        $startDate,
-        $endDate
-    ): static
+        mixed $startDate,
+        mixed $endDate
+    ): string
     {
         $column = $this->buildConditionColumn($column);
 
@@ -231,9 +268,9 @@ trait BuildConditionsTrait
 
     protected function buildDateTimeCompareCondition(
         mixed $column,
-        $dateTime,
+        mixed $dateTime,
         string $operator = '='
-    ): static
+    ): string
     {
         $dateTime = $this->getConnection()->dateTime($dateTime);
         return $this->buildCompareCondition($column, $dateTime, $operator);
@@ -241,9 +278,9 @@ trait BuildConditionsTrait
 
     public function buildDateTimeBetweenCondition(
         mixed $column,
-        null|string|DateTimeInterface $startDateTime,
-        null|string|DateTimeInterface $endDateTime
-    ): static
+        mixed $startDateTime,
+        mixed $endDateTime
+    ): string
     {
         $column = $this->buildConditionColumn($column);
 
@@ -253,10 +290,8 @@ trait BuildConditionsTrait
         $endDateTime = $this->getConnection()->dateTime($endDateTime);
         $endDateTime = $this->buildScalar($endDateTime);
 
-        $this->conditions[] = $column . ' >= ' . $startDateTime .
+        return $column . ' >= ' . $startDateTime .
             ' AND ' . $column . ' <= ' . $endDateTime;
-
-        return $this;
     }
 
     protected function buildDateTimePartCondition(
@@ -264,7 +299,7 @@ trait BuildConditionsTrait
         mixed $column,
         ?int $value,
         string $operator
-    ): static
+    ): string
     {
         $column = $this->buildConditionColumn($column);
 
@@ -277,13 +312,22 @@ trait BuildConditionsTrait
         return $part . '(' . $column . ') ' . $operator . ' ' . $value;
     }
 
-    public function buildYearsAgoCondition($column, $value, $operator = '=')
+    public function buildYearsAgoCondition(
+        mixed $column,
+        mixed $value,
+        string $operator = '='
+    ): string
     {
         $column = $this->buildConditionColumn($column);
 
-        $age = 'DATE_FORMAT(NOW(), \'%Y\') - DATE_FORMAT(' . $column . ', \'%Y\') - (DATE_FORMAT(NOW(), \'00-%m-%d\') < DATE_FORMAT(' . $column . ', \'00-%m-%d\'))';
+        $age = 'DATE_FORMAT(NOW(), \'%Y\') - ' .
+            'DATE_FORMAT(' . $column . ', \'%Y\') - ' .
+            '(DATE_FORMAT(NOW(), \'00-%m-%d\') < ' .
+            'DATE_FORMAT(' . $column . ', \'00-%m-%d\'))';
 
-        return $age . ' ' . $operator . ' \'' . $this->getConnection()->escapeString($value) . '\'';
+        $value = $this->buildScalar($value);
+
+        return $age . ' ' . $operator . ' ' . $value;
     }
 
     protected function buildColumnCompareCondition(
@@ -301,5 +345,16 @@ trait BuildConditionsTrait
         $column2 = $this->buildConditionColumn($column2);
 
         return $column1 . ' ' . $operator . ' ' . $column2;
+    }
+
+    private function getStringValue(mixed $value): string
+    {
+        if ($value instanceof DateTimeInterface) {
+            $value = $this->getConnection()->dateTime($value);
+        } else {
+            $value = pyncer_stringify($value) ?? '';
+        }
+
+        return $value;
     }
 }

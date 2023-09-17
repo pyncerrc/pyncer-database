@@ -26,7 +26,6 @@ interface TableQueryInterface extends
     * and auto increment.
     *
     * @param string $columnName The name of the column.
-    * @param int $size The size of the integer.
     */
     public function serial(string $columnName): static;
 
@@ -34,7 +33,7 @@ interface TableQueryInterface extends
     * Adds an integer column to the table.
     *
     * @param string $columnName The name of the column.
-    * @param int $size The size of the integer.
+    * @param IntSize $size The size of the integer.
     */
     public function int(string $columnName, IntSize $size = IntSize::LARGE): static;
 
@@ -42,6 +41,7 @@ interface TableQueryInterface extends
     * Adds a double column to the table.
     *
     * @param string $columnName The name of the column.
+    * @param FloatSize $size The size of the float.
     */
     public function float(string $columnName, FloatSize $size = FloatSize::DOUBLE): static;
 
@@ -49,6 +49,8 @@ interface TableQueryInterface extends
     * Adds a decimal column to the table.
     *
     * @param string $columnName The name of the column.
+    * @param int $precision The precision of the decimal.
+    * @param int $scale The scale of the decimal.
     */
     public function decimal(
         string $columnName,
@@ -75,8 +77,8 @@ interface TableQueryInterface extends
     /**
     * Adds a text column to the table.
     *
-    * @param mixed $columnName The name of the column.
-    * @param int $size The size of the text.
+    * @param string $columnName The name of the column.
+    * @param TextSize $size The size of the text.
     */
     public function text(string $columnName, TextSize $size = TextSize::SMALL): static;
 

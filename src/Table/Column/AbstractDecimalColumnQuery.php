@@ -5,6 +5,7 @@ use Pyncer\Database\ConnectionInterface;
 use Pyncer\Database\Table\Column\AbstractColumnQuery;
 use Pyncer\Database\Table\Column\DecimalColumnQueryInterface;
 use Pyncer\Database\Table\TableQueryInterface;
+use Pyncer\Exception\InvalidArgumentException;
 
 abstract class AbstractDecimalColumnQuery extends AbstractColumnQuery implements
     DecimalColumnQueryInterface
@@ -12,7 +13,7 @@ abstract class AbstractDecimalColumnQuery extends AbstractColumnQuery implements
     private int $precision;
     private int $scale;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,
@@ -30,7 +31,8 @@ abstract class AbstractDecimalColumnQuery extends AbstractColumnQuery implements
         string $name,
         int $precision = 10,
         int $scale = 0,
-    ) {
+    ): static
+    {
         $column = new static(
             $query->getConnection(),
             $query->getTable(),

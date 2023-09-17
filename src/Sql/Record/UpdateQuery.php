@@ -1,6 +1,7 @@
 <?php
 namespace Pyncer\Database\Sql\Record;
 
+use Pyncer\Database\Function\FunctionInterface;
 use Pyncer\Database\Record\AbstractUpdateQuery;
 use Pyncer\Database\Record\ConditionsInterface;
 use Pyncer\Database\Sql\Build\BuildColumnTrait;

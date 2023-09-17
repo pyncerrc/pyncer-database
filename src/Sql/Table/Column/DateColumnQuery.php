@@ -8,7 +8,7 @@ class DateColumnQuery extends AbstractDateColumnQuery
 {
     use ColumnQueryStringTrait;
 
-    public function buildType()
+    public function buildType(): string
     {
         return 'DATE';
     }

@@ -2,6 +2,7 @@
 namespace Pyncer\Database;
 
 use Pyncer\Database\ConnectionTrait;
+use Pyncer\Database\Exception\ResultException;
 use Pyncer\Database\QueryResultInterface;
 use Pyncer\Database\Record\SelectQueryInterface;
 
@@ -16,7 +17,7 @@ class QueryResult implements QueryResultInterface
     private ?array $params;
     private string $prefix;
 
-    private null|bool|array|object $result;
+    private ?object $result;
     private ?int $count;
     private int $offset;
     private int $currentCount;
@@ -24,7 +25,7 @@ class QueryResult implements QueryResultInterface
     private ?array $currentRow;
     private bool $endOfQuery = false;
 
-    private $rewound = false;
+    private bool $rewound = false;
 
     public function __construct(
         ConnectionInterface $connection,
@@ -48,7 +49,7 @@ class QueryResult implements QueryResultInterface
 
     public function __destruct()
     {
-        if ($this->result) {
+        if ($this->result !== null) {
             $this->connection->free($this->result);
         }
     }
@@ -68,14 +69,20 @@ class QueryResult implements QueryResultInterface
             $this->connection->setPrefix($this->prefix);
 
             $this->query->limit($this->count, $this->currentOffset);
-            $this->result = $this->query->execute($this->params);
+            $result = $this->query->execute($this->params);
 
             $this->connection->setPrefix($prefix);
 
         } else {
             $this->currentOffset = 0;
-            $this->result = $this->query->execute($this->params);
+            $result = $this->query->execute($this->params);
         }
+
+        if (!is_object($result)) {
+            throw new ResultException('Query did not produce a result object.');
+        }
+
+        $this->result = $result;
 
         $this->currentCount = $this->connection->numRows($this->result);
 
@@ -99,6 +106,10 @@ class QueryResult implements QueryResultInterface
 
     public function next(): void
     {
+        if ($this->result === null) {
+            return;
+        }
+
         $this->rewound = false;
 
         ++$this->currentOffset;
@@ -110,7 +121,13 @@ class QueryResult implements QueryResultInterface
                 $this->connection->setPrefix($this->prefix);
 
                 $this->query->limit($this->count, $this->currentOffset);
-                $this->result = $this->query->execute();
+                $result = $this->query->execute();
+
+                if (!is_object($result)) {
+                    throw new ResultException('Query did not produce a result object.');
+                }
+
+                $this->result = $result;
 
                 $this->connection->setPrefix($prefix);
 
@@ -131,7 +148,9 @@ class QueryResult implements QueryResultInterface
 
     public function count(): int
     {
-        $this->rewind();
+        if ($this->result === null) {
+            $this->rewind();
+        }
 
         return $this->currentCount;
     }
@@ -141,11 +160,19 @@ class QueryResult implements QueryResultInterface
         $count = $this->count;
         $this->count = 1;
 
+        // If not rewound already, then we need to reset its
+        // state so its not a count of 1 for first batch
+        $reset = !$this->rewound;
+
         $this->rewind();
 
         $row = ($this->valid() ? $this->current() : null);
 
         $this->count = $count;
+
+        if ($reset) {
+            $this->rewound = false;
+        }
 
         return $row;
     }

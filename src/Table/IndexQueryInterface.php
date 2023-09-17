@@ -27,4 +27,6 @@ interface IndexQueryInterface extends
 
     public function getComment(): ?string;
     public function setComment(?string $value): static;
+
+    public function equals(mixed $value): bool;
 }

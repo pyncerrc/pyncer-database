@@ -8,7 +8,7 @@ class DateTimeColumnQuery extends AbstractDateTimeColumnQuery
 {
     use ColumnQueryStringTrait;
 
-    public function buildType()
+    public function buildType(): string
     {
         if ($this->getPrecision() > 0) {
             return 'DATETIME(' . $this->getPrecision() . ')';

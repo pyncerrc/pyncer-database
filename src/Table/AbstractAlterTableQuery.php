@@ -53,7 +53,11 @@ abstract class AbstractAlterTableQuery extends AbstractTableQuery implements
 
     public function first(?string $columnName = null): static
     {
-        $column = $this->getColumn($column);
+        if ($columnName === null) {
+            $column = $this->getColumns()[0];
+        } else {
+            $column = $this->getColumn($columnName);
+        }
         $column->setFirst(true);
         return $this;
     }

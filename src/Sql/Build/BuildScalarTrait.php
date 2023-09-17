@@ -1,7 +1,9 @@
 <?php
 namespace Pyncer\Database\Sql\Build;
 
-use DateTime;
+use DateTimeInterface;
+use Pyncer\Exception\InvalidArgumentException;
+use Stringable;
 
 trait BuildScalarTrait
 {
@@ -12,15 +14,21 @@ trait BuildScalarTrait
         }
 
         if (is_int($value) || is_float($value)) {
-            return $value;
+            return strval($value);
         }
 
         if (is_bool($value)) {
             return ($value ? "'1'" : "'0'");
         }
 
-        if ($value instanceof DateTime) {
+        if ($value instanceof DateTimeInterface) {
             $value = $this->getConnection()->dateTime($value);
+        }
+
+        if (is_scalar($value) || $value instanceof Stringable) {
+            $value = strval($value);
+        } else {
+            throw new InvalidArgumentException('The specified value is not supported.');
         }
 
         return "'" . $this->getConnection()->escapeString($value) . "'";

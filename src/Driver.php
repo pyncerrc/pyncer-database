@@ -4,25 +4,19 @@ namespace Pyncer\Database;
 use Pyncer\Database\ConnectionInterface;
 use Pyncer\Database\Exception\DriverNotFoundException;
 use Pyncer\Exception\InvalidArgumentException;
+use Pyncer\Utility\Params;
+use Stringable;
 
 use const DIRECTORY_SEPARATOR as DS;
 
-final class Driver
+final class Driver extends Params
 {
-    private string $name;
-    private string $host;
-    private string $database;
-    private string $username;
-    private string $password;
-    private string $prefix;
-    private array $params = [];
-
     public function __construct(
-        string $name = '',
-        string $host = '',
-        string $database = '',
-        string $username = '',
-        string $password = '',
+        string $name,
+        string $database,
+        ?string $host = null,
+        ?string $username = null,
+        ?string $password = null,
         string $prefix = '',
         array $params = []
     ) {
@@ -30,8 +24,8 @@ final class Driver
         $this->setData($params);
 
         $this->setName($name);
-        $this->setHost($host);
         $this->setDatabase($database);
+        $this->setHost($host);
         $this->setUsername($username);
         $this->setPassword($password);
         $this->setPrefix($prefix);
@@ -39,147 +33,108 @@ final class Driver
 
     public function getName(): string
     {
-        return $this->name;
+        /** @var string **/
+        return $this->getString('name');
     }
     public function setName(string $value): static
     {
-        if (!preg_match('/\A[A-Za-z0-9_]+\z/', $value)) {
-            throw new InvalidArgumentException(
-                'The specified driver name, ' . $value . ', is invalid.'
-            );
-        }
+        return $this->setString('name', $value);
+    }
 
-        $file = __DIR__ . DS . 'Driver' . DS . $value . DS . 'Connection.php';
-        if (!file_exists($file)) {
-            throw new DriverNotFoundException($value);
-        }
-
-        $this->name = $value;
-
-        return $this;
+    public function getDatabase(): string
+    {
+        /** @var string **/
+        return $this->getString('database');
+    }
+    public function setDatabase(string $value): static
+    {
+        return $this->setString('database', $value);
     }
 
     public function getConnection(): ConnectionInterface
     {
         $class = '\Pyncer\Database\Driver\\' . $this->getName() . '\\Connection';
+
+        /** @var ConnectionInterface **/
         return new $class($this);
     }
 
-    public function getHost(): string
+    public function getHost(): ?string
     {
-        return $this->host;
+        return $this->getString('host', null);
     }
-    public function setHost(string $value): static
+    public function setHost(?string $value): static
     {
-        $this->host = $value;
-        return $this;
+        return $this->setString('host', $value);
     }
-    public function getDatabase(): string
+
+    public function getUsername(): ?string
     {
-        return $this->database;
+        return $this->getString('username', null);
     }
-    public function setDatabase(string $value): static
+    public function setUsername(?string $value): static
     {
-        $this->database = $value;
-        return $this;
+        return $this->setString('username', $value);
     }
-    public function getUsername(): string
+
+    public function getPassword(): ?string
     {
-        return $this->username;
+        return $this->getString('password', null);
     }
-    public function setUsername(string $value): static
+    public function setPassword(?string $value): static
     {
-        $this->username = $value;
-        return $this;
+        return $this->setString('password', $value);
     }
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-    public function setPassword(string $value): static
-    {
-        $this->password = $value;
-        return $this;
-    }
+
     public function getPrefix(): string
     {
-        return $this->prefix;
+        /** @var string **/
+        return $this->getString('prefix');
     }
     public function setPrefix(string $value): static
     {
-        $this->prefix = $value;
-        return $this;
+        return $this->setString('prefix', $value);
     }
 
-    public function getParam(string $param, mixed $default = null): mixed
+    public function set(string $key, mixed $value): static
     {
-        switch ($param) {
+        switch ($key) {
             case "name":
-                return $this->getName();
+                if ($value instanceof Stringable) {
+                    $value = strval($value);
+                }
+
+                if (!is_string($value)) {
+                    throw new InvalidArgumentException('The ' . $key . ' param must be a string.');
+                }
+
+                if (!preg_match('/\A[A-Za-z0-9_]+\z/', $value)) {
+                    throw new InvalidArgumentException(
+                        'The specified driver name, ' . $value . ', is invalid.'
+                    );
+                }
+
+                $file = __DIR__ . DS . 'Driver' . DS . $value . DS . 'Connection.php';
+                if (!file_exists($file)) {
+                    throw new DriverNotFoundException($value);
+                }
+                break;
             case "host":
-                return $this->getHost();
             case "database":
-                return $this->getData();
             case "username":
-                return $this->getUsername();
             case "password":
-                return $this->getPassword();
             case "prefix":
-                return $this->getPrefix();
+                if ($value instanceof Stringable) {
+                    $value = strval($value);
+                }
+
+                if (!is_string($value)) {
+                    throw new InvalidArgumentException('The ' . $key . ' param must be a string.');
+                }
+                break;
         }
 
-        return $this->params[$param] ?? $default;
-    }
-    public function setParam(string $param, mixed $value): static
-    {
-        switch ($param) {
-            case "name":
-                return $this->setName($value);
-            case "host":
-                return $this->setHost($value);
-            case "database":
-                return $this->setDatabase($value);
-            case "username":
-                return $this->setUsername($value);
-            case "password":
-                return $this->setPassword($value);
-            case "prefix":
-                return $this->setPrefix($value);
-        }
-
-        if ($value === null) {
-            unset($this->params[$param]);
-        } else {
-            $this->params[$param] = $value;
-        }
-
-        return $this;
-    }
-
-    public function getData(): array
-    {
-        $data = [
-            'name' => $this->getName(),
-            'host' => $this->getHost(),
-            'database' => $this->getDatabase(),
-            'username' => $this->getUsername(),
-            'password' => $this->getPassword(),
-            'prefix' => $this->getPrefix(),
-        ];
-
-        foreach ($this->params as $key => $value) {
-            $data[$key] = $value;
-        }
-
-        return $data;
-    }
-    public function setData(array $data): static
-    {
-        foreach ($data as $key => $value) {
-            $this->setParam($key, $value);
-        }
-
-        return $this;
+        return parent::set($key, $value);
     }
 
     public function __toString(): string

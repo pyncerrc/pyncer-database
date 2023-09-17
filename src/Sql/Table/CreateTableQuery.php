@@ -2,6 +2,7 @@
 namespace Pyncer\Database\Sql\Table;
 
 use Pyncer\Database\EncodingInterface;
+use Pyncer\Database\Exception\ResultException;
 use Pyncer\Database\Sql\Build\BuildColumnTrait;
 use Pyncer\Database\Sql\Build\BuildScalarTrait;
 use Pyncer\Database\Sql\Build\BuildTableTrait;
@@ -23,6 +24,7 @@ class CreateTableQuery extends AbstractCreateTableQuery
     {
         $params['multi'] = true;
 
+        /** @var array<int, mixed> **/
         $result = $this->getConnection()->execute(
             $this->getQueryString(),
             $params

@@ -10,7 +10,9 @@ use Pyncer\Database\Table\TableQueryInterface;
 abstract class AbstractFloatColumnQuery extends AbstractColumnQuery implements
     FloatColumnQueryInterface
 {
-    public function __construct(
+    private FloatSize $size;
+
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,
@@ -25,7 +27,8 @@ abstract class AbstractFloatColumnQuery extends AbstractColumnQuery implements
         TableQueryInterface $query,
         string $name,
         FloatSize $size = FloatSize::DOUBLE
-    ) {
+    ): static
+    {
         $column = new static(
             $query->getConnection(),
             $query->getTable(),

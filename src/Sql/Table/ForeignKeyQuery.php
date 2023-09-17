@@ -79,7 +79,7 @@ class ForeignKeyQuery extends AbstractForeignKeyQuery
         return $query;
     }
 
-    private function getReferentialAction(ReferentialAction $action)
+    private function getReferentialAction(ReferentialAction $action): string
     {
         return match($action) {
             ReferentialAction::CASCADE => 'CASCADE',

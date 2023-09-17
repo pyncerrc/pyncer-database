@@ -14,8 +14,10 @@ abstract class AbstractFunction implements FunctionInterface
 
     protected array $arguments = [];
 
-    public function __construct(ConnectionInterface $connection, string $table)
-    {
+    public function __construct(
+        ConnectionInterface $connection,
+        string $table
+    ) {
         $this->setConnection($connection);
         $this->setTable($table);
     }
@@ -25,7 +27,7 @@ abstract class AbstractFunction implements FunctionInterface
         return $this->getConnection()->execute($this->getQueryString(), $params);
     }
 
-    public function arguments(...$arguments): static
+    public function arguments(mixed ...$arguments): static
     {
         $this->arguments = [];
 

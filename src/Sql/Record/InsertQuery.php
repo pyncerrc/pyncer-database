@@ -1,8 +1,8 @@
 <?php
 namespace Pyncer\Database\Sql\Record;
 
+use Pyncer\Database\Function\FunctionInterface;
 use Pyncer\Database\Record\AbstractInsertQuery;
-use Pyncer\Database\Record\Function\FunctionInterface;
 use Pyncer\Database\Sql\Build\BuildColumnTrait;
 use Pyncer\Database\Sql\Build\BuildScalarTrait;
 use Pyncer\Database\Sql\Build\BuildTableTrait;

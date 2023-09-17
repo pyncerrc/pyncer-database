@@ -1,6 +1,7 @@
 <?php
 namespace Pyncer\Database\Sql;
 
+use Countable;
 use Pyncer\Database\AbstractConnection;
 use Pyncer\Database\Driver;
 use Pyncer\Database\Exception\ColumnExistsException;
@@ -57,15 +58,15 @@ abstract class AbstractSqlConnection extends AbstractConnection
         $this->connectionId = $driver->getName() . '_' . ++self::$counter;
 
         // Lets keep time consistant accross requests
-        $this->time = intval($driver->getParam('time', PYNCER_NOW));
+        $this->time = $driver->getInt('time', PYNCER_NOW);
 
-        $this->setCharacterSet($driver->getParam('character_set', $this->getDefaultCharacterSet()));
-        $this->setCollation($driver->getParam('collation', $this->getDefaultCollation()));
-        $this->setEngine($driver->getParam('engine', $this->getDefaultEngine()));
+        $this->setCharacterSet($driver->getString('character_set', $this->getDefaultCharacterSet()));
+        $this->setCollation($driver->getString('collation', $this->getDefaultCollation()));
+        $this->setEngine($driver->getString('engine', $this->getDefaultEngine()));
 
         $this->setNames($this->getCharacterSet(), $this->getCollation());
 
-        $timeZone = $driver->getParam('time_zone');
+        $timeZone = $driver->getString('time_zone', null);
         if ($timeZone !== null) {
             $this->setTimeZone($timeZone);
         } else { // Default make same as what is set in PHP
@@ -95,6 +96,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
         $characterSet = $this->buildScalar($this->getCharacterSet());
         $collation = $this->buildScalar($this->getCollation());
 
+        /** @var bool **/
         return $this->execute(sprintf(
             "SET NAMES %s COLLATE %s",
             $characterSet,
@@ -104,7 +106,12 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
     public function setTimeZone(string $timezone): bool
     {
-        return $this->execute('SET time_zone=\'' . $this->escapeString($timezone) . '\'');
+        $timeZone = $this->buildScalar($timezone);
+
+        /** @var bool **/
+        return $this->execute(
+            'SET time_zone=' . $timeZone
+        );
     }
 
     public function date(mixed $dateTime = -1, bool $local = false): string
@@ -136,6 +143,8 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
         if ($dateTime !== null) {
             $dateTime = $dateTime->format($format);
+        } else {
+            $dateTime = '';
         }
 
         return $dateTime;
@@ -156,9 +165,11 @@ abstract class AbstractSqlConnection extends AbstractConnection
         ++$this->transactionCount;
 
         if ($this->transactionCount > 1) {
+            /** @var bool **/
             return $this->execute('SAVEPOINT `trans' . $this->transactionCount . '`');
         }
 
+        /** @var bool **/
         return $this->execute('START TRANSACTION');
     }
 
@@ -167,9 +178,11 @@ abstract class AbstractSqlConnection extends AbstractConnection
         --$this->transactionCount;
 
         if ($this->transactionCount > 0) {
+            /** @var bool **/
             return $this->execute('ROLLBACK TO SAVEPOINT `trans' . ($this->transactionCount + 1) . '`');
         }
 
+        /** @var bool **/
         return $this->execute('ROLLBACK');
     }
 
@@ -178,9 +191,11 @@ abstract class AbstractSqlConnection extends AbstractConnection
         --$this->transactionCount;
 
         if ($this->transactionCount > 0) {
+            /** @var bool **/
             return $this->execute('RELEASE SAVEPOINT `trans' . ($this->transactionCount + 1) . '`');
         }
 
+        /** @var bool **/
         return $this->execute('COMMIT');
     }
 
@@ -209,7 +224,10 @@ abstract class AbstractSqlConnection extends AbstractConnection
         return new DeleteQuery($this, $table);
     }
 
-    public function functions(string $table, $function): FunctionInterface
+    public function functions(
+        string $table,
+        string $function
+    ): FunctionInterface
     {
         $driverName = $this->getDriver()->getName();
 
@@ -222,6 +240,8 @@ abstract class AbstractSqlConnection extends AbstractConnection
         if (file_exists($file)) {
             $class = '\Pyncer\Database\Driver\\' . $driverName .
                 '\Functions\\' . $function . 'Function';
+
+            /** @var FunctionInterface **/
             return new $class($this);
         }
 
@@ -231,6 +251,8 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
         if (file_exists($file)) {
             $class = '\Pyncer\Database\Sql\Function\\' . $function . 'Function';
+
+            /** @var FunctionInterface **/
             return new $class($this, $table);
         }
 
@@ -239,6 +261,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
     public function hasDatabase(string $database): bool
     {
+        /** @var object **/
         $result = $this->execute(
             "SHOW DATABASES LIKE " . $this->buildScalar($database)
         );
@@ -252,6 +275,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new DatabaseNotFoundException($database);
         }
 
+        /** @var bool **/
         return $this->execute(
             "DROP DATABASE IF EXISTS " . $this->buildDatabase($database)
         );
@@ -263,6 +287,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new DatabaseExistsException($database);
         }
 
+        /** @var bool **/
         return $this->execute(
             "CREATE DATABASE IF EXISTS " . $this->buildDatabase($database) .
             " CHARACTER SET " . $this->buildScalar($this->getCharacterSet()) .
@@ -272,6 +297,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
     public function hasTable(string $table): bool
     {
+        /** @var object **/
         $result = $this->execute(
             "SHOW TABLES LIKE " . $this->buildScalar($this->buildTable($table, true))
         );
@@ -285,6 +311,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new TableNotFoundException($table);
         }
 
+        /** @var bool **/
         return $this->execute(
             "DROP TABLE " . $this->buildTable($table)
         );
@@ -321,6 +348,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new TableExistsException($newTableName);
         }
 
+        /** @var bool **/
         return $this->execute(
             "RENAME TABLE " . $this->buildTable($oldTableName) .
             " TO " . $this->buildTable($newTableName)
@@ -333,6 +361,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new TableNotFoundException($table);
         }
 
+        /** @var bool **/
         return $this->execute(
             "TRUNCATE TABLE " . $this->buildTable($table)
         );
@@ -344,12 +373,13 @@ abstract class AbstractSqlConnection extends AbstractConnection
             return false;
         }
 
+        /** @var Countable **/
         $result = $this->execute(
             "SHOW COLUMNS FROM " . $this->buildTable($table) .
             " LIKE " . $this->buildScalar($this->buildColumn($column, true))
         );
 
-        return ($result && count($result) > 0);
+        return (count($result) > 0);
     }
 
     public function dropColumn(string $table, string $column): bool
@@ -358,6 +388,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new ColumnNotFoundException($table, $column);
         }
 
+        /** @var bool **/
         return $this->execute(
             "ALTER TABLE " . $this->buildTable($table) .
             " DROP " . $this->buildColumn($column)
@@ -378,6 +409,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new ColumnExistsException($table, $newColumnName);
         }
 
+        /** @var bool **/
         return $this->alterTable($table)
             ->rename($oldColumnName, $newColumnName)
             ->execute();

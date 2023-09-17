@@ -9,7 +9,7 @@ class FloatColumnQuery extends AbstractFloatColumnQuery
 {
     use ColumnQueryStringTrait;
 
-    public function buildType()
+    public function buildType(): string
     {
         return match ($this->getSize()) {
             FloatSize::SINGLE => 'FLOAT',

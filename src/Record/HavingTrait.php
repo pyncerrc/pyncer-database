@@ -11,6 +11,8 @@ trait HavingTrait
 
     protected ?ConditionsInterface $having = null;
 
+    abstract protected function initializeHaving(): ConditionsInterface;
+
     /**
     * Sets the having conditions of the returned rows.
     *

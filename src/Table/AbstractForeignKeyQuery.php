@@ -7,6 +7,7 @@ use Pyncer\Database\Table\ReferentialAction;
 use Pyncer\Database\Table\ForeignKeyQueryInterface;
 use Pyncer\Database\Table\TableQueryInterface;
 use Pyncer\Database\TableTrait;
+use Pyncer\Exception\InvalidArgumentException;
 
 abstract class AbstractForeignKeyQuery extends AbstractQuery implements
     ForeignKeyQueryInterface
@@ -21,7 +22,7 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
     private ?ReferentialAction $deleteAction;
     private ?ReferentialAction $updateAction;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,
@@ -43,7 +44,8 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
         TableQueryInterface $query,
         string $name,
         string ...$columnNames,
-    ) {
+    ): static
+    {
         $foreignKey = new static(
             $query->getConnection(),
             $query->getTable(),

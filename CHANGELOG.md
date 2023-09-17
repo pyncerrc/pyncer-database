@@ -8,12 +8,15 @@
 - Added support for comparing columns in conditionals.
 - Added support for using select queries as columns.
 - Added hasGroupBy and hasOrderBy functions to select queries.
+- Added missing ForeignKeyNotFoundException class.
+- Added PHPStan static analysis.
 
 ### Fixed
 
 - Fixed issues with function pathing.
-- Added missing types on various class properties.
+- Added missing types on various class properties and function parameters.
 - Added missing $local parameter on ConnectionInterface date functions.
+- Fixed various issues picked up by PHPStan.
 
 ## 1.0.7 - 2023-09-06
 

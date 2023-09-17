@@ -9,7 +9,7 @@ class IntColumnQuery extends AbstractIntColumnQuery
 {
     use ColumnQueryStringTrait;
 
-    public function buildType()
+    public function buildType(): string
     {
         return match ($this->getSize()) {
             IntSize::TINY => 'TINYINT',

@@ -11,6 +11,8 @@ trait WhereTrait
 
     protected ?ConditionsInterface $where = null;
 
+    abstract protected function initializeWhere(): ConditionsInterface;
+
     /**
     * Sets the where conditions of the returned rows.
     *

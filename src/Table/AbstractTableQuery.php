@@ -3,9 +3,12 @@ namespace Pyncer\Database\Table;
 
 use Pyncer\Database\AbstractQuery;
 use Pyncer\Database\ConnectionInterface;
+use Pyncer\Database\EncodingInterface;
 use Pyncer\Database\EncodingTrait;
 use Pyncer\Database\EngineTrait;
 use Pyncer\Database\Exception\ColumnNotFoundException;
+use Pyncer\Database\Exception\ForeignKeyNotFoundException;
+use Pyncer\Database\Exception\IndexNotFoundException;
 use Pyncer\Database\Table\Column\ColumnQueryInterface;
 use Pyncer\Database\Table\Column\DateTimeColumnQueryInterface;
 use Pyncer\Database\Table\Column\IntColumnQueryInterface;
@@ -15,6 +18,7 @@ use Pyncer\Database\Table\ForeignKeyQueryInterface;
 use Pyncer\Database\Table\IndexQueryInterface;
 use Pyncer\Database\Table\TableQueryInterface;
 use Pyncer\Database\TableTrait;
+use Pyncer\Exception\InvalidArgumentException;
 use Pyncer\Exception\UnexpectedValueException;
 
 abstract class AbstractTableQuery extends AbstractQuery implements
@@ -248,7 +252,7 @@ abstract class AbstractTableQuery extends AbstractQuery implements
             return $this;
         }
 
-        $columns = $this->getColumns($columnNames);
+        $columns = $this->getColumns(...$columnNames);
 
         foreach ($columns as $column) {
             if (!$column instanceof EncodingInterface) {
@@ -272,7 +276,7 @@ abstract class AbstractTableQuery extends AbstractQuery implements
             return $this;
         }
 
-        $columns = $this->getColumns($columnNames);
+        $columns = $this->getColumns(...$columnNames);
 
         foreach ($columns as $column) {
             if (!$column instanceof EncodingInterface) {
@@ -393,6 +397,7 @@ abstract class AbstractTableQuery extends AbstractQuery implements
     public function dropPrimary(): static
     {
         $this->primary = [];
+        return $this;
     }
 
     public function getPrimary(): ?array

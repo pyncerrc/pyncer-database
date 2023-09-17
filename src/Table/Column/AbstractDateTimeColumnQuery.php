@@ -13,7 +13,7 @@ abstract class AbstractDateTimeColumnQuery extends AbstractColumnQuery implement
     private int $precision;
     private bool $autoUpdate;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,
@@ -30,7 +30,8 @@ abstract class AbstractDateTimeColumnQuery extends AbstractColumnQuery implement
         TableQueryInterface $query,
         string $name,
         int $precision = 0,
-    ) {
+    ): static
+    {
         $column = new static(
             $query->getConnection(),
             $query->getTable(),

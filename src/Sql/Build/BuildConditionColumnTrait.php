@@ -2,6 +2,7 @@
 namespace Pyncer\Database\Sql\Build;
 
 use Pyncer\Database\Function\FunctionInterface;
+use Pyncer\Exception\InvalidArgumentException;
 
 trait BuildConditionColumnTrait
 {
@@ -23,10 +24,12 @@ trait BuildConditionColumnTrait
             }
         } elseif ($column instanceof FunctionInterface) {
             $column = $column->getQueryString();
-        } else {
+        } elseif (is_string($column)) {
             $column = $this->buildTable($this->getTable()) .
                 '.' .
                 $this->buildColumn($column);
+        } else {
+            throw new InvalidArgumentException('Column type is not supported.');
         }
 
         return $column;

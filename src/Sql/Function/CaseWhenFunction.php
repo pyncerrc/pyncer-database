@@ -21,13 +21,13 @@ class CaseWhenFunction implements FunctionInterface
     use BuildConditionColumnTrait;
     use BuildScalarTrait;
 
-    protected $case = null;
-    protected $else = null;
-    protected $conditions = [];
+    protected ?string $case = null;
+    protected ?string $else = null;
+    protected array $conditions = [];
 
     public function __construct(
         ConnectionInterface $connection,
-        $table
+        string $table
     ) {
         $this->setConnection($connection);
         $this->setTable($table);
@@ -38,21 +38,22 @@ class CaseWhenFunction implements FunctionInterface
         return $this->getConnection()->execute($this->getQueryString(), $params);
     }
 
-    public function case($column, $binary = false): static
+    public function case(mixed $column, bool $binary = false): static
     {
         $case = $this->buildConditionColumn($column);
 
         if ($binary) {
-            $case = 'BINARY ' . $column;
+            $case = 'BINARY ' . $case;
         }
 
         $this->case = $case;
 
         return $this;
     }
-    public function when($value, $result): static
+
+    public function when(mixed $value, mixed $result): static
     {
-        if (!$this->case) {
+        if ($this->case === null) {
             throw new UnexpectedValueException('Case not set.');
         }
 
@@ -72,7 +73,14 @@ class CaseWhenFunction implements FunctionInterface
 
         return $this;
     }
-    public function whenCompare($column, $value, $result, $operator = '=', $binary = false): static
+
+    public function whenCompare(
+        mixed $column,
+        mixed $value,
+        mixed $result,
+        string $operator = '=',
+        bool $binary = false
+    ): static
     {
         $column = $this->buildConditionColumn($column);
 
@@ -101,7 +109,7 @@ class CaseWhenFunction implements FunctionInterface
         return $this;
     }
 
-    public function else($result): static
+    public function else(mixed $result): static
     {
         $this->else = $this->buildScalar($result);
         return $this;

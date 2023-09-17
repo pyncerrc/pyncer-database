@@ -14,7 +14,7 @@ abstract class AbstractIntColumnQuery extends AbstractColumnQuery implements
     private bool $autoIncrement;
     private bool $unsigned;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,

@@ -7,6 +7,7 @@ use Pyncer\Database\Table\CommentTrait;
 use Pyncer\Database\Table\IndexQueryInterface;
 use Pyncer\Database\Table\TableQueryInterface;
 use Pyncer\Database\TableTrait;
+use Pyncer\Exception\InvalidArgumentException;
 
 abstract class AbstractIndexQuery extends AbstractQuery implements
     IndexQueryInterface
@@ -20,7 +21,7 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
     private bool $unique;
     private bool $fulltext;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,
@@ -41,7 +42,8 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
         TableQueryInterface $query,
         string $name,
         string ...$columnNames,
-    ) {
+    ): static
+    {
         $index = new static(
             $query->getConnection(),
             $query->getTable(),

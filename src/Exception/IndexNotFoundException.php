@@ -5,23 +5,23 @@ use Pyncer\Database\Exception\Exception;
 use Pyncer\Exception\RuntimeException;
 use Throwable;
 
-class ColumnNotFoundException extends RuntimeException implements
+class IndexNotFoundException extends RuntimeException implements
     Exception
 {
     protected string $table;
-    protected string $column;
+    protected string $index;
 
     public function __construct(
         string $table,
-        string $column,
+        string $index,
         int $code = 0,
         ?\Throwable $previous = null
     ) {
         $this->table = $table;
-        $this->column = $column;
+        $this->index = $index;
 
         parent::__construct(
-            'The specified column, ' . $table . "." . $column . ', was not found.',
+            'The specified index, ' . $table . "." . $index. ', was not found.',
             $code,
             $previous
         );
@@ -32,8 +32,8 @@ class ColumnNotFoundException extends RuntimeException implements
         return $this->table;
     }
 
-    public function getColumn(): string
+    public function getIndex(): string
     {
-        return $this->column;
+        return $this->index;
     }
 }

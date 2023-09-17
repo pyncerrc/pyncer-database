@@ -9,7 +9,7 @@ class TextColumnQuery extends AbstractTextColumnQuery
 {
     use ColumnQueryStringTrait;
 
-    public function buildType()
+    public function buildType(): string
     {
         return match($this->getSize()) {
             TextSize::TINY => 'TINYTEXT',

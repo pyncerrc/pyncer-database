@@ -141,7 +141,7 @@ trait TableQueryTrait
         if ($this->hasColumn($columnName)) {
             $column = $this->getColumn($columnName);
             if ($column instanceof TextColumnQueryInterface) {
-                $column->setSite($size);
+                $column->setSize($size);
                 return $this->addColumn($column);
             }
         }

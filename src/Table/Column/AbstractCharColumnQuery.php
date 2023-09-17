@@ -15,7 +15,7 @@ abstract class AbstractCharColumnQuery extends AbstractColumnQuery implements
 
     private int $length;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,

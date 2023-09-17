@@ -10,13 +10,14 @@ use Pyncer\Database\Record\UpdateQueryInterface;
 use Pyncer\Database\Table\CreateTableQueryInterface;
 use Pyncer\Database\Table\AlterTableQueryInterface;
 
-interface ConnectionInterface
+interface ConnectionInterface extends
+    EncodingInterface,
+    EngineInterface
 {
     public function getDriver(): Driver;
 
     public function getConnectionId(): string;
 
-    public function connected(): bool;
     public function close(): bool;
     public function error(): array;
 
@@ -42,9 +43,9 @@ interface ConnectionInterface
     public function fetchValue(object $result): mixed;
 
     public function seek(object $result, int $offset): bool;
-    public function numRows(object $result): int|string;
+    public function numRows(object $result): int;
     public function free(object $result): bool;
-    public function affectedRows(): int|string;
+    public function affectedRows(): int;
 
     public function start(): bool;
     public function rollback(): bool;
@@ -55,26 +56,29 @@ interface ConnectionInterface
     *
     * @param string $table The table to select rows from
     *
-    * @return \Pyncer\Database\Query\SelectQueryInterface
+    * @return SelectQueryInterface
     */
     public function select(string $table): SelectQueryInterface;
 
     /**
     * Select rows from the query
     *
-    * @param \Pyncer\Database\Query\SelectQueryInterface $query The query to select rows from
+    * @param SelectQueryInterface $query The query to select rows from
     * @param string $table The temporary table name to give the query
     *
-    * @return \Pyncer\Database\Query\SelectQueryInterface
+    * @return SelectQueryInterface
     */
-    public function selectQuery(string $table, SelectQueryInterface $query): SelectQueryInterface;
+    public function selectQuery(
+        string $table,
+        SelectQueryInterface $query
+    ): SelectQueryInterface;
 
     /**
     * Insert a row into the specified table.
     *
     * @param string $table The table to insert into
     *
-    * @return \Pyncer\Database\Query\InsertQueryInterface
+    * @return InsertQueryInterface
     */
     public function insert(string $table): InsertQueryInterface;
 
@@ -85,7 +89,7 @@ interface ConnectionInterface
     *
     * @param string $table The table to update
     *
-    * @return \Pyncer\Database\Query\UpdateQueryInterface
+    * @return UpdateQueryInterface
     */
     public function update(string $table): UpdateQueryInterface;
 
@@ -94,7 +98,7 @@ interface ConnectionInterface
     *
     * @param string $table The table to delete from
     *
-    * @return \Pyncer\Database\Query\DeleteQueryInterface
+    * @return DeleteQueryInterface
     */
     public function delete(string $table): DeleteQueryInterface;
 
@@ -111,12 +115,12 @@ interface ConnectionInterface
     * Add a table to the database.
     *
     * @param string $table The name of the table
-    * @return \Pyncer\Database\Query\Table\CreateTableQueryInterface
+    * @return CreateTableQueryInterface
     */
     public function createTable(string $table): CreateTableQueryInterface;
 
     /**
-    * @return \Pyncer\Database\Query\Table\AlterTableQueryInterface
+    * @return AlterTableQueryInterface
     */
     public function alterTable(string $table): AlterTableQueryInterface;
     public function renameTable(string $oldTableName, string $newTableName): bool;

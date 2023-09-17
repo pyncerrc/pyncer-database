@@ -8,7 +8,7 @@ class EnumColumnQuery extends AbstractEnumColumnQuery
 {
     use ColumnQueryStringTrait;
 
-    public function buildType()
+    public function buildType(): string
     {
         $values = array_map([$this->getConnection(), 'escapeString'], $this->getValues());
         $values = "'" . implode("','", $values) . "'";

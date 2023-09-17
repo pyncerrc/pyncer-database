@@ -27,4 +27,6 @@ interface ForeignKeyQueryInterface extends QueryInterface, EqualsInterface
 
     public function getUpdateAction(): ?ReferentialAction;
     public function setUpdateAction(?ReferentialAction $value): static;
+
+    public function equals(mixed $value): bool;
 }

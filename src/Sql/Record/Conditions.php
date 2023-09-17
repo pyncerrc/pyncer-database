@@ -7,6 +7,7 @@ use Pyncer\Database\Sql\Build\BuildColumnTrait;
 use Pyncer\Database\Sql\Build\BuildConditionColumnTrait;
 use Pyncer\Database\Sql\Build\BuildConditionsTrait;
 use Pyncer\Database\Sql\Build\BuildScalarTrait;
+use Pyncer\Exception\UnexpectedValueException;
 
 class Conditions extends AbstractConditions
 {
@@ -72,6 +73,7 @@ class Conditions extends AbstractConditions
                 'dateTimeSecond' => $this->buildDateTimePartCondition('SECOND', ...$value[1]),
                 'yearsAgo' => $this->buildYearsAgoCondition(...$value[1]),
                 'columnCompare' => $this->buildColumnCompareCondition(...$value[1]),
+                default => throw new UnexpectedValueException('Unexpected conditon.'),
             };
         }
 

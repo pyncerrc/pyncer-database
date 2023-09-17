@@ -15,15 +15,13 @@ abstract class AbstractStringColumnQuery extends AbstractColumnQuery implements
 
     private int $length;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,
         int $length = 250
     ) {
         parent::__construct($connection, $table, $name);
-
-        $length ??= 250;
 
         $this->setLength($length);
         $this->setCharacterSet($this->getConnection()->getCharacterSet());
@@ -34,7 +32,8 @@ abstract class AbstractStringColumnQuery extends AbstractColumnQuery implements
         TableQueryInterface $query,
         string $name,
         int $length = 250,
-    ) {
+    ): static
+    {
         $column = new static(
             $query->getConnection(),
             $query->getTable(),

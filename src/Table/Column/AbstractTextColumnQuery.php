@@ -15,7 +15,7 @@ abstract class AbstractTextColumnQuery extends AbstractColumnQuery implements
 
     private TextSize $size;
 
-    public function __construct(
+    final public function __construct(
         ConnectionInterface $connection,
         string $table,
         string $name,
@@ -32,7 +32,8 @@ abstract class AbstractTextColumnQuery extends AbstractColumnQuery implements
         TableQueryInterface $query,
         string $name,
         TextSize $size = TextSize::SMALL,
-    ) {
+    ): static
+    {
         $column = new static(
             $query->getConnection(),
             $query->getTable(),
