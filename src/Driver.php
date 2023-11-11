@@ -24,10 +24,10 @@ final class Driver extends Params
         $this->setData($params);
 
         $this->setName($name);
-        $this->setDatabase($database);
         $this->setHost($host);
         $this->setUsername($username);
         $this->setPassword($password);
+        $this->setDatabase($database);
         $this->setPrefix($prefix);
     }
 
@@ -39,16 +39,6 @@ final class Driver extends Params
     public function setName(string $value): static
     {
         return $this->setString('name', $value);
-    }
-
-    public function getDatabase(): string
-    {
-        /** @var string **/
-        return $this->getString('database');
-    }
-    public function setDatabase(string $value): static
-    {
-        return $this->setString('database', $value);
     }
 
     public function getConnection(): ConnectionInterface
@@ -84,6 +74,16 @@ final class Driver extends Params
     public function setPassword(?string $value): static
     {
         return $this->setString('password', $value);
+    }
+
+    public function getDatabase(): string
+    {
+        /** @var string **/
+        return $this->getString('database');
+    }
+    public function setDatabase(string $value): static
+    {
+        return $this->setString('database', $value);
     }
 
     public function getPrefix(): string

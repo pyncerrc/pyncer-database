@@ -8,6 +8,7 @@ use Pyncer\Database\Record\SelectQueryInterface;
 
 use function Pyncer\Array\set_recursive;
 use function Pyncer\Array\intersect_keys;
+use function Pyncer\stringify as pyncer_stringify;
 
 class QueryResult implements QueryResultInterface
 {
@@ -185,7 +186,7 @@ class QueryResult implements QueryResultInterface
         if ($keys) {
             foreach ($this as $value) {
                 $actualKeys = array_map(function($key) use($value) {
-                    return $value[$key] ?? '@';
+                    return $this->getKeyFromValue($value[$key] ?? null);
                 }, $keys);
                 $data = set_recursive($data, $actualKeys, $value);
             }
@@ -205,7 +206,7 @@ class QueryResult implements QueryResultInterface
         if ($keys) {
             foreach ($this as $value) {
                 $actualKeys = array_map(function($key) use($value) {
-                    return $value[$key] ?? '@';
+                    return $this->getKeyFromValue($value[$key] ?? null);
                 }, $keys);
                 $data = set_recursive($data, $actualKeys, $value[$column]);
             }
@@ -225,7 +226,7 @@ class QueryResult implements QueryResultInterface
         if ($keys) {
             foreach ($this as $value) {
                 $actualKeys = array_map(function($key) use($value) {
-                    return $value[$key] ?? '@';
+                    return $this->getKeyFromValue($value[$key] ?? null);
                 }, $keys);
 
                 $data = set_recursive(
@@ -241,5 +242,14 @@ class QueryResult implements QueryResultInterface
         }
 
         return $data;
+    }
+
+    private function getKeyFromValue(mixed $value): int|string
+    {
+        if (!is_int($value)) {
+            $value = pyncer_stringify($value);
+        }
+
+        return $value ?? '@';
     }
 }
