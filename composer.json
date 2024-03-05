@@ -21,7 +21,7 @@
     },
     "extra" : {
         "branch-alias" : {
-            "dev-main" : "1.1-dev"
+            "dev-main" : "1.2-dev"
         }
     },
     "require-dev": {

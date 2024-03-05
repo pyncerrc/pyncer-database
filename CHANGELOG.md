@@ -1,10 +1,11 @@
 # Change Log
 
-## 1.1.1 - Unreleased
+## 1.2.0 - Unreleased
 
 ### Changed
 
 - QueryResult will now stringify column values when using them as keys in an array.
+- Driver now extends AbstractDriver utility class.
 
 ## 1.1.0 - 2023-09-17
 

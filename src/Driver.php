@@ -4,12 +4,10 @@ namespace Pyncer\Database;
 use Pyncer\Database\ConnectionInterface;
 use Pyncer\Database\Exception\DriverNotFoundException;
 use Pyncer\Exception\InvalidArgumentException;
-use Pyncer\Utility\Params;
+use Pyncer\Utility\AbstractDriver;
 use Stringable;
 
-use const DIRECTORY_SEPARATOR as DS;
-
-final class Driver extends Params
+final class Driver extends AbstractDriver
 {
     public function __construct(
         string $name,
@@ -20,10 +18,8 @@ final class Driver extends Params
         string $prefix = '',
         array $params = []
     ) {
-        // Set params first so other specific fields take precedence
-        $this->setData($params);
+        parent::__construct($name, $params);
 
-        $this->setName($name);
         $this->setHost($host);
         $this->setUsername($username);
         $this->setPassword($password);
@@ -31,19 +27,19 @@ final class Driver extends Params
         $this->setPrefix($prefix);
     }
 
-    public function getName(): string
+    protected function getType(): string
     {
-        /** @var string **/
-        return $this->getString('name');
+        return 'connection';
     }
-    public function setName(string $value): static
+
+    protected function getClass(): string
     {
-        return $this->setString('name', $value);
+        return '\Pyncer\Database\Driver\\' . $this->getName() . '\\Connection';
     }
 
     public function getConnection(): ConnectionInterface
     {
-        $class = '\Pyncer\Database\Driver\\' . $this->getName() . '\\Connection';
+        $class = $this->getClass();
 
         /** @var ConnectionInterface **/
         return new $class($this);
@@ -99,31 +95,19 @@ final class Driver extends Params
     public function set(string $key, mixed $value): static
     {
         switch ($key) {
-            case "name":
+            case 'host':
+            case 'username':
+            case 'password':
                 if ($value instanceof Stringable) {
                     $value = strval($value);
                 }
 
-                if (!is_string($value)) {
-                    throw new InvalidArgumentException('The ' . $key . ' param must be a string.');
-                }
-
-                if (!preg_match('/\A[A-Za-z0-9_]+\z/', $value)) {
-                    throw new InvalidArgumentException(
-                        'The specified driver name, ' . $value . ', is invalid.'
-                    );
-                }
-
-                $file = __DIR__ . DS . 'Driver' . DS . $value . DS . 'Connection.php';
-                if (!file_exists($file)) {
-                    throw new DriverNotFoundException($value);
+                if ($value !== null && !is_string($value)) {
+                    throw new InvalidArgumentException('The ' . $key . ' param must be a string or null.');
                 }
                 break;
-            case "host":
-            case "database":
-            case "username":
-            case "password":
-            case "prefix":
+            case 'database':
+            case 'prefix':
                 if ($value instanceof Stringable) {
                     $value = strval($value);
                 }
@@ -135,10 +119,5 @@ final class Driver extends Params
         }
 
         return parent::set($key, $value);
-    }
-
-    public function __toString(): string
-    {
-        return $this->getName();
     }
 }
