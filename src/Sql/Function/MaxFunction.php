@@ -15,7 +15,7 @@ class MaxFunction extends AbstractFunction
 
     public function getQueryString(): string
     {
-        $query = "MAX(" . ($this->distinct ? " DISTINCT" : '');
+        $query = "MAX(" . ($this->distinct ? "DISTINCT " : '');
 
         $params = $this->getArgumentQueryString();
         if ($params === '') {

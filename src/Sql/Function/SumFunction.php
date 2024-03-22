@@ -15,7 +15,7 @@ class SumFunction extends AbstractFunction
 
     public function getQueryString(): string
     {
-        $query = "SUM(" . ($this->distinct ? " DISTINCT" : '');
+        $query = "SUM(" . ($this->distinct ? "DISTINCT " : '');
 
         $params = $this->getArgumentQueryString();
         if ($params === '') {

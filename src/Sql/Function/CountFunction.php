@@ -15,7 +15,7 @@ class CountFunction extends AbstractFunction
 
     public function getQueryString(): string
     {
-        $query = "COUNT(" . ($this->distinct ? " DISTINCT" : '');
+        $query = "COUNT(" . ($this->distinct ? "DISTINCT " : '');
 
         $params = $this->getArgumentQueryString();
         if ($params === '') {
