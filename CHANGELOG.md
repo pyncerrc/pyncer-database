@@ -1,10 +1,19 @@
 # Change Log
 
-## 1.2.0 - Unreleased
+## 1.2.0 - 2024-03-22
+
+### Added
+
+- Added COALESCE SQL function.
+
+### Fixed
+
+- Fixed spacing issue when using distinct option in functions.
 
 ### Changed
 
 - QueryResult will now stringify column values when using them as keys in an array.
+- AbstractFunction string arguments will now be treated as columns instead of strings.
 - Driver now extends AbstractDriver utility class.
 
 ## 1.1.0 - 2023-09-17

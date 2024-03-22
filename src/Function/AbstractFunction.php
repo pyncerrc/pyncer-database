@@ -34,15 +34,15 @@ abstract class AbstractFunction implements FunctionInterface
 
         foreach ($arguments as $argument) {
             if (is_string($argument)) {
-                $this->arguments[] = [$this->getTable(), $argument];
+                $argument = [$this->getTable(), $argument];
             } elseif (is_int($argument) || is_float($argument)) {
-                $this->arguments[] = [null, $argument];
+                $argument = [null, $argument];
                 continue;
             } elseif ($argument instanceof FunctionInterface) {
-                $this->arguments[] = ['@', $argument];
+                $argument = ['@', $argument];
                 continue;
             } elseif ($argument instanceof Stringable) {
-                $this->arguments[] = [null, strval($argument)];
+                $argument = [null, strval($argument)];
                 continue;
             }
 
