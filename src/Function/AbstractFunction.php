@@ -6,6 +6,7 @@ use Pyncer\Database\ConnectionTrait;
 use Pyncer\Database\Function\FunctionInterface;
 use Pyncer\Database\TableTrait;
 use Pyncer\Exception\InvalidArgumentException;
+use Stringable;
 
 abstract class AbstractFunction implements FunctionInterface
 {
@@ -32,11 +33,16 @@ abstract class AbstractFunction implements FunctionInterface
         $this->arguments = [];
 
         foreach ($arguments as $argument) {
-            if (is_string($argument) || is_int($argument) || is_float($argument)) {
+            if (is_string($argument)) {
+                $this->arguments[] = [$this->getTable(), $argument];
+            } elseif (is_int($argument) || is_float($argument)) {
                 $this->arguments[] = [null, $argument];
                 continue;
             } elseif ($argument instanceof FunctionInterface) {
                 $this->arguments[] = ['@', $argument];
+                continue;
+            } elseif ($argument instanceof Stringable) {
+                $this->arguments[] = [null, strval($argument)];
                 continue;
             }
 
