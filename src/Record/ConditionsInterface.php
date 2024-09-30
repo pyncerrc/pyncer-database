@@ -3,6 +3,7 @@ namespace Pyncer\Database\Record;
 
 use Pyncer\Database\ConnectionInterface;
 use Pyncer\Database\Record\WhereQueryInterface;
+use Pyncer\Database\Record\SearchMode;
 use Stringable;
 
 interface ConditionsInterface extends Stringable
@@ -45,6 +46,8 @@ interface ConditionsInterface extends Stringable
     public function dateTimeMinute(mixed $column, ?int $minute = null, string $operator = '='): static;
     public function dateTimeSecond(mixed $column, ?int $second = null, string $operator = '='): static;
     public function yearsAgo(mixed $column, mixed $value, string $operator = '='): static;
+
+    public function matchAgainst(mixed $column, mixed $value, SearchMode $searchMode = SearchMode::NATURAL_LANGUAGE): static;
 
     public function columnCompare(mixed $column, mixed $value, string $operator = '=', bool $caseSensitive = false): static;
 

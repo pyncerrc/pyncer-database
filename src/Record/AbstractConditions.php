@@ -4,6 +4,7 @@ namespace Pyncer\Database\Record;
 use Pyncer\Database\ConnectionTrait;
 use Pyncer\Database\Record\ConditionsInterface;
 use Pyncer\Database\Record\RecordQueryInterface;
+use Pyncer\Database\Record\SearchMode;
 use Pyncer\Database\TableTrait;
 use Pyncer\Exception\UnexpectedValueException;
 
@@ -302,6 +303,15 @@ abstract class AbstractConditions implements ConditionsInterface
     ): static
     {
         return $this->addCondition('yearsAgo', func_get_args());
+    }
+
+    public function matchAgainst(
+        mixed $column,
+        mixed $value,
+        SearchMode $searchMode = SearchMode::NATURAL_LANGUAGE
+    ): static
+    {
+        return $this->addCondition('matchAgainst', func_get_args());
     }
 
     public function columnCompare(

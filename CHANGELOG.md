@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.1 - Unreleased
+
+### Added
+
+- Added MATCH AGAINST comparison condition.
+
 ## 1.2.0 - 2024-03-22
 
 ### Added

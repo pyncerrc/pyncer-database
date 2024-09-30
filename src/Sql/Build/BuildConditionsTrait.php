@@ -2,6 +2,7 @@
 namespace Pyncer\Database\Sql\Build;
 
 use DateTimeInterface;
+use Pyncer\Database\Record\SearchMode;
 use Pyncer\Exception\InvalidArgumentException;
 
 use function Pyncer\stringify as pyncer_stringify;
@@ -328,6 +329,41 @@ trait BuildConditionsTrait
         $value = $this->buildScalar($value);
 
         return $age . ' ' . $operator . ' ' . $value;
+    }
+
+    public function buildMatchAgainstCondition(
+        mixed $column,
+        mixed $value,
+        SearchMode $searchMode = SearchMode::NATURAL_LANGUAGE
+    ): string
+    {
+        // Support for multiple columns
+        if (is_array($column) && is_array($column[0])) {
+            $columns = [];
+
+            foreach ($column as $columnValue) {
+                $columns[] = $this->buildConditionColumn($columnValue);
+            }
+
+            $columns = implode(',', $columns);
+        } else {
+            $columns = $this->buildConditionColumn($column);
+        }
+
+        if ($value === null) {
+            $value = '';
+        } else {
+            $value = $this->buildScalar($value);
+        }
+
+        $mode = match ($searchMode) {
+            SearchMode::BOOLEAN => 'IN BOOLEAN MODE',
+            SearchMode::NATURAL_LANGUAGE => 'IN NATURAL LANGUAGE MODE',
+            SearchMode::QUERY_EXPANSION => 'WITH QUERY EXPANSION',
+            SearchMode::NATURAL_LANGUAGE_WITH_QUERY_EXPANSION => 'IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION',
+        };
+
+        return 'MATCH(' . $columns . ') AGAINST(' . $value . ' ' . $mode . ')';
     }
 
     protected function buildColumnCompareCondition(
