@@ -19,7 +19,7 @@ class DeleteQuery extends AbstractDeleteQuery
     use BuildScalarTrait;
     use BuildTableTrait;
 
-    protected function initializeWhere(): ConditionsInterface
+    protected function forgeWhere(): ConditionsInterface
     {
         return new Conditions($this);
     }

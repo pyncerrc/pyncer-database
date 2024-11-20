@@ -18,7 +18,7 @@ class UpdateQuery extends AbstractUpdateQuery
     use BuildScalarTrait;
     use BuildTableTrait;
 
-    protected function initializeWhere(): ConditionsInterface
+    protected function forgeWhere(): ConditionsInterface
     {
         return new Conditions($this);
     }

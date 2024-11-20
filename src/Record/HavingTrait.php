@@ -11,7 +11,7 @@ trait HavingTrait
 
     protected ?ConditionsInterface $having = null;
 
-    abstract protected function initializeHaving(): ConditionsInterface;
+    abstract protected function forgeHaving(): ConditionsInterface;
 
     /**
     * Sets the having conditions of the returned rows.
@@ -33,7 +33,7 @@ trait HavingTrait
     public function getHaving(): ConditionsInterface
     {
         if ($this->having === null) {
-            $this->having = $this->initializeHaving();
+            $this->having = $this->forgeHaving();
         }
 
         return $this->having;

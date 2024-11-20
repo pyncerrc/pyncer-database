@@ -11,7 +11,7 @@ trait WhereTrait
 
     protected ?ConditionsInterface $where = null;
 
-    abstract protected function initializeWhere(): ConditionsInterface;
+    abstract protected function forgeWhere(): ConditionsInterface;
 
     /**
     * Sets the where conditions of the returned rows.
@@ -33,7 +33,7 @@ trait WhereTrait
     public function getWhere(): ConditionsInterface
     {
         if ($this->where === null) {
-            $this->where = $this->initializeWhere();
+            $this->where = $this->forgeWhere();
         }
 
         return $this->where;

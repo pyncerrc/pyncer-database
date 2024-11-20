@@ -47,12 +47,12 @@ class SelectQueryQuery extends AbstractSelectQuery
         return $this;
     }
 
-    protected function initializeWhere(): ConditionsInterface
+    protected function forgeWhere(): ConditionsInterface
     {
         return new Conditions($this);
     }
 
-    protected function initializeHaving(): ConditionsInterface
+    protected function forgeHaving(): ConditionsInterface
     {
         return new Conditions($this);
     }

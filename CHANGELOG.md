@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.3.1 - Unreleased
+
+### Changed
+
+- Renamed some internal functions for consistency.
+
 ## 1.3.0 - 2024-11-15
 
 ### Added
