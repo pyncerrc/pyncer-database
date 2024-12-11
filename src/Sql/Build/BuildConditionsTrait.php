@@ -337,7 +337,10 @@ trait BuildConditionsTrait
         SearchMode $searchMode = SearchMode::NATURAL_LANGUAGE
     ): string
     {
-        $matchAgainst = new MatchAgainstFunction($this->getConnection());
+        $matchAgainst = $this->getConnection()->functions(
+            $this->getTable(),
+            'MatchAgainst'
+        );
         $matchAgainst->match($column)
             ->against($value, $searchMode);
 
