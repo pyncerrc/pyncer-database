@@ -6,6 +6,7 @@
 
 - Added MATCH AGAINST function.
 - Added GREATEST function.
+- Added hasColumns method to ColumnsTrait.
 
 ### Fixed
 

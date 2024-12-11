@@ -67,4 +67,9 @@ trait ColumnsTrait
 
         return $this;
     }
+
+    public function hasColumns(): bool
+    {
+        return (count($this->columns) > 0);
+    }
 }
