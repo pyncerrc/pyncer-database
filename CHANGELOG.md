@@ -2,9 +2,19 @@
 
 ## 1.3.1 - Unreleased
 
+### Added
+
+- Added MATCH AGAINST function.
+- Added GREATEST function.
+
+### Fixed
+
+- Fixed some error message spelling mistakes.
+
 ### Changed
 
 - Renamed some internal functions for consistency.
+- Removed unnecessary $asValue parameter from buildColumn function.
 
 ## 1.3.0 - 2024-11-15
 
