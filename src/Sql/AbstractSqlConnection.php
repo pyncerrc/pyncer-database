@@ -376,7 +376,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
         /** @var Countable **/
         $result = $this->execute(
             "SHOW COLUMNS FROM " . $this->buildTable($table) .
-            " LIKE " . $this->buildScalar($this->buildColumn($column, true))
+            " LIKE " . $this->buildScalar($column)
         );
 
         return (count($result) > 0);
