@@ -25,7 +25,7 @@ trait BuildOrderByTrait
             } elseif ($value[0] === null) {
                 $orderByQueries[] = $this->buildColumn($value[1]) .
                     ' ' . strtoupper($value[2]);
-            } else{
+            } else {
                 $orderByQueries[] = $this->buildTable($value[0]) .
                     '.' .
                     $this->buildColumn($value[1]) .
