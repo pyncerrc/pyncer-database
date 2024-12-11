@@ -337,33 +337,11 @@ trait BuildConditionsTrait
         SearchMode $searchMode = SearchMode::NATURAL_LANGUAGE
     ): string
     {
-        // Support for multiple columns
-        if (is_array($column) && is_array($column[0])) {
-            $columns = [];
+        $matchAgainst = new MatchAgainstFunction($this->getConnection());
+        $matchAgainst->match($column)
+            ->against($value, $searchMode);
 
-            foreach ($column as $columnValue) {
-                $columns[] = $this->buildConditionColumn($columnValue);
-            }
-
-            $columns = implode(',', $columns);
-        } else {
-            $columns = $this->buildConditionColumn($column);
-        }
-
-        if ($value === null) {
-            $value = '';
-        } else {
-            $value = $this->buildScalar($value);
-        }
-
-        $mode = match ($searchMode) {
-            SearchMode::BOOLEAN => 'IN BOOLEAN MODE',
-            SearchMode::NATURAL_LANGUAGE => 'IN NATURAL LANGUAGE MODE',
-            SearchMode::QUERY_EXPANSION => 'WITH QUERY EXPANSION',
-            SearchMode::NATURAL_LANGUAGE_WITH_QUERY_EXPANSION => 'IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION',
-        };
-
-        return 'MATCH(' . $columns . ') AGAINST(' . $value . ' ' . $mode . ')';
+        return $matchAgainst->getQueryString();
     }
 
     protected function buildColumnCompareCondition(
