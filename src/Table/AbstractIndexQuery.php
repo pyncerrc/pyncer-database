@@ -74,7 +74,7 @@ abstract class AbstractIndexQuery extends AbstractQuery implements
     {
         if ($value === '') {
             throw new InvalidArgumentException(
-                'Name cannont be an empty string.'
+                'Name cannot be an empty string.'
             );
         }
 

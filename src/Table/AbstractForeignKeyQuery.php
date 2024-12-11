@@ -76,7 +76,7 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
     {
         if ($value === '') {
             throw new InvalidArgumentException(
-                'Name cannont be an empty string.'
+                'Name cannot be an empty string.'
             );
         }
 
@@ -108,7 +108,7 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
     {
         if ($value === '') {
             throw new InvalidArgumentException(
-                'Reference table cannont be an empty string. (' . $this->getName() . ')'
+                'Reference table cannot be an empty string. (' . $this->getName() . ')'
             );
         }
 
