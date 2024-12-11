@@ -71,6 +71,8 @@ class MatchAgainstFunction implements FunctionInterface
 
         $this->value = $value;
 
+        $this->searchMode = $searchMode;
+
         return $this;
     }
 
