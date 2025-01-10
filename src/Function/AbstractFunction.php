@@ -37,13 +37,10 @@ abstract class AbstractFunction implements FunctionInterface
                 $argument = [$this->getTable(), $argument];
             } elseif (is_int($argument) || is_float($argument)) {
                 $argument = [null, $argument];
-                continue;
             } elseif ($argument instanceof FunctionInterface) {
                 $argument = ['@', $argument];
-                continue;
             } elseif ($argument instanceof Stringable) {
                 $argument = [null, strval($argument)];
-                continue;
             }
 
             if (!is_array($argument)) {

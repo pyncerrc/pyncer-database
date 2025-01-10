@@ -11,6 +11,7 @@
 ### Fixed
 
 - Fixed some error message spelling mistakes.
+- Fixed function arguments being removed in some cases.
 
 ### Changed
 
