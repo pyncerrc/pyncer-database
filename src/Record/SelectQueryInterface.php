@@ -27,5 +27,5 @@ interface SelectQueryInterface extends
 
     public function value(): ?string;
 
-    public function result(array $params = null): QueryResultInterface;
+    public function result(?array $params = null): QueryResultInterface;
 }
