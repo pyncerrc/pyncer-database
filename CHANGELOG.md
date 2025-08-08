@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.3.2 - 2025-08-08
+
+### Fixed
+
+- Added missing hasColumns method to ColumnsQueryInterface.
+- Removed ignored PHPStan rules.
+
 ## 1.3.1 - 2025-08-08
 
 ### Added
