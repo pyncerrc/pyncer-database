@@ -239,10 +239,10 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
         if (file_exists($file)) {
             $class = '\Pyncer\Database\Driver\\' . $driverName .
-                '\Functions\\' . $function . 'Function';
+                '\Function\\' . $function . 'Function';
 
             /** @var FunctionInterface **/
-            return new $class($this);
+            return new $class($this, $table);
         }
 
         $file = __DIR__ . DS .
