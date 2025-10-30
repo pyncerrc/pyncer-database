@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.4.0 - 2025-10-30
+
+### Added
+
+- Added Point MySQL function.
+- Added ST\_Distance\_Sphere MySQL function.
+
+### Fixed
+
+- Fixed wrong namespace when using driver specific functions.
+
 ## 1.3.2 - 2025-08-08
 
 ### Fixed
