@@ -9,27 +9,27 @@ class Expression extends AbstractExpression
 {
     protected array $groups = [];
 
-    public function includes(string ...$words): static
+    public function include(string ...$words): static
     {
         $words = $this->cleanWords($words, true);
 
         if (count($words) > 1) {
-            $groups[] = '+(' . implode(' ', $words) .')';
+            $this->groups[] = '+(' . implode(' ', $words) .')';
         } else {
-            $groups[] = '+' . $words[0];
+            $this->groups[] = '+' . $words[0];
         }
 
         return $this;
     }
 
-    public function excludes(string ...$words): static
+    public function exclude(string ...$words): static
     {
         $words = $this->cleanWords($words, true);
 
         if (count($words) > 1) {
-            $groups[] = '-(' . implode(' ', $words) .')';
+            $this->groups[] = '-(' . implode(' ', $words) .')';
         } else {
-            $groups[] = '-' . $words[0];
+            $this->groups[] = '-' . $words[0];
         }
 
         return $this;
@@ -40,9 +40,9 @@ class Expression extends AbstractExpression
         $words = $this->cleanWords($words, true);
 
         if (count($words) > 1) {
-            $groups[] = '(' . implode(' ', $words) .')';
+            $this->groups[] = '(' . implode(' ', $words) .')';
         } else {
-            $groups[] = $words[0];
+            $this->groups[] = $words[0];
         }
 
         return $this;
@@ -59,19 +59,19 @@ class Expression extends AbstractExpression
             return $this->optional($words);
         }
 
-        $groups[] = '"' . $words .'" @' . strval($distance);
+        $this->groups[] = '"' . $words .'" @' . strval($distance);
 
         return $this;
     }
 
-    public function negates(string ...$words): static
+    public function negate(string ...$words): static
     {
         $words = $this->cleanWords($words, true);
 
         if (count($words) > 1) {
-            $groups[] = '~(' . implode(' ', $words) .')';
+            $this->groups[] = '~(' . implode(' ', $words) .')';
         } else {
-            $groups[] = '~' . $words[0];
+            $this->groups[] = '~' . $words[0];
         }
 
         return $this;
