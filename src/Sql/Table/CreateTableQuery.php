@@ -24,7 +24,7 @@ class CreateTableQuery extends AbstractCreateTableQuery
     {
         $params['multi'] = true;
 
-        /** @var array<int, mixed> **/
+        /** @var array<int, mixed> */
         $result = $this->getConnection()->execute(
             $this->getQueryString(),
             $params

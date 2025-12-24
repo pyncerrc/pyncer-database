@@ -10,6 +10,7 @@ use Pyncer\Database\Exception\DatabaseExistsException;
 use Pyncer\Database\Exception\DatabaseNotFoundException;
 use Pyncer\Database\Exception\TableExistsException;
 use Pyncer\Database\Exception\TableNotFoundException;
+use Pyncer\Database\Expression\ExpressionInterface;
 use Pyncer\Database\Function\FunctionInterface;
 use Pyncer\Database\Record\DeleteQueryInterface;
 use Pyncer\Database\Record\InsertQueryInterface;
@@ -96,7 +97,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
         $characterSet = $this->buildScalar($this->getCharacterSet());
         $collation = $this->buildScalar($this->getCollation());
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute(sprintf(
             "SET NAMES %s COLLATE %s",
             $characterSet,
@@ -108,7 +109,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
     {
         $timeZone = $this->buildScalar($timezone);
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute(
             'SET time_zone=' . $timeZone
         );
@@ -165,11 +166,11 @@ abstract class AbstractSqlConnection extends AbstractConnection
         ++$this->transactionCount;
 
         if ($this->transactionCount > 1) {
-            /** @var bool **/
+            /** @var bool */
             return $this->execute('SAVEPOINT `trans' . $this->transactionCount . '`');
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute('START TRANSACTION');
     }
 
@@ -178,11 +179,11 @@ abstract class AbstractSqlConnection extends AbstractConnection
         --$this->transactionCount;
 
         if ($this->transactionCount > 0) {
-            /** @var bool **/
+            /** @var bool */
             return $this->execute('ROLLBACK TO SAVEPOINT `trans' . ($this->transactionCount + 1) . '`');
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute('ROLLBACK');
     }
 
@@ -191,11 +192,11 @@ abstract class AbstractSqlConnection extends AbstractConnection
         --$this->transactionCount;
 
         if ($this->transactionCount > 0) {
-            /** @var bool **/
+            /** @var bool */
             return $this->execute('RELEASE SAVEPOINT `trans' . ($this->transactionCount + 1) . '`');
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute('COMMIT');
     }
 
@@ -241,7 +242,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             $class = '\Pyncer\Database\Driver\\' . $driverName .
                 '\Function\\' . $function . 'Function';
 
-            /** @var FunctionInterface **/
+            /** @var FunctionInterface */
             return new $class($this, $table);
         }
 
@@ -252,16 +253,42 @@ abstract class AbstractSqlConnection extends AbstractConnection
         if (file_exists($file)) {
             $class = '\Pyncer\Database\Sql\Function\\' . $function . 'Function';
 
-            /** @var FunctionInterface **/
+            /** @var FunctionInterface */
             return new $class($this, $table);
         }
 
         throw new InvalidArgumentException('Function is invalid. (' . $function . ')');
     }
 
+    public function expression(): ExpressionInterface
+    {
+        $driverName = $this->getDriver()->getName();
+
+        $file = dirname(__DIR__) . DS .
+            'Driver' . DS .
+            $driverName . DS .
+            'Expression' . DS .
+            'Expression.php';
+
+        if (file_exists($file)) {
+            $class = '\Pyncer\Database\Driver\\' . $driverName .
+                '\Expression\\Expression';
+
+            /** @var ExpressionInterface */
+            return new $class($this);
+        }
+
+        $file = __DIR__ . DS . 'Expression' . DS . 'Expression.php';
+
+        $class = '\Pyncer\Database\Sql\Expression\\Expression';
+
+        /** @var ExpressionInterface */
+        return new $class($this);
+    }
+
     public function hasDatabase(string $database): bool
     {
-        /** @var object **/
+        /** @var object */
         $result = $this->execute(
             "SHOW DATABASES LIKE " . $this->buildScalar($database)
         );
@@ -275,7 +302,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new DatabaseNotFoundException($database);
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute(
             "DROP DATABASE IF EXISTS " . $this->buildDatabase($database)
         );
@@ -287,7 +314,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new DatabaseExistsException($database);
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute(
             "CREATE DATABASE IF EXISTS " . $this->buildDatabase($database) .
             " CHARACTER SET " . $this->buildScalar($this->getCharacterSet()) .
@@ -297,7 +324,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
     public function hasTable(string $table): bool
     {
-        /** @var object **/
+        /** @var object */
         $result = $this->execute(
             "SHOW TABLES LIKE " . $this->buildScalar($this->buildTable($table, true))
         );
@@ -311,7 +338,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new TableNotFoundException($table);
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute(
             "DROP TABLE " . $this->buildTable($table)
         );
@@ -348,7 +375,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new TableExistsException($newTableName);
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute(
             "RENAME TABLE " . $this->buildTable($oldTableName) .
             " TO " . $this->buildTable($newTableName)
@@ -361,7 +388,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new TableNotFoundException($table);
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute(
             "TRUNCATE TABLE " . $this->buildTable($table)
         );
@@ -373,7 +400,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             return false;
         }
 
-        /** @var Countable **/
+        /** @var Countable */
         $result = $this->execute(
             "SHOW COLUMNS FROM " . $this->buildTable($table) .
             " LIKE " . $this->buildScalar($column)
@@ -388,7 +415,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new ColumnNotFoundException($table, $column);
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->execute(
             "ALTER TABLE " . $this->buildTable($table) .
             " DROP " . $this->buildColumn($column)
@@ -409,7 +436,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
             throw new ColumnExistsException($table, $newColumnName);
         }
 
-        /** @var bool **/
+        /** @var bool */
         return $this->alterTable($table)
             ->rename($oldColumnName, $newColumnName)
             ->execute();

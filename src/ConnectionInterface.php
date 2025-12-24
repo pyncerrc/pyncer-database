@@ -2,6 +2,7 @@
 namespace Pyncer\Database;
 
 use Pyncer\Database\Driver;
+use Pyncer\Database\Expression\ExpressionInterface;
 use Pyncer\Database\Function\FunctionInterface;
 use Pyncer\Database\Record\DeleteQueryInterface;
 use Pyncer\Database\Record\InsertQueryInterface;
@@ -103,6 +104,8 @@ interface ConnectionInterface extends
     public function delete(string $table): DeleteQueryInterface;
 
     public function functions(string $table, string $function): FunctionInterface;
+
+    public function expression(): ExpressionInterface;
 
     public function hasDatabase(string $database): bool;
     public function dropDatabase(string $database): bool;

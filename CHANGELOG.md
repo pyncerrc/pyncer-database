@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.0 - Unreleased
+
+### Added
+
+- Added Expression class and interface for use with MATCH AGAINST function.
+- Added QueryStringInterface for queries components that do not execute.
+
+### Changed
+
+- FunctionInterface now extends QueryStringInterface instead of QueryInterface.
+
 ## 1.4.0 - 2025-10-30
 
 ### Added

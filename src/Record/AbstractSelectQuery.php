@@ -50,7 +50,7 @@ abstract class AbstractSelectQuery extends AbstractRecordQuery implements
         $limit = $this->limit;
         $this->limit = [1, 0];
 
-        /** @var object **/
+        /** @var object */
         $result = $this->execute();
 
         $this->limit = $limit;
@@ -63,7 +63,7 @@ abstract class AbstractSelectQuery extends AbstractRecordQuery implements
         $limit = $this->limit;
         $this->limit = [1, 0];
 
-        /** @var object **/
+        /** @var object */
         $result = $this->execute();
 
         $this->limit = $limit;

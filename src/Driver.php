@@ -41,7 +41,7 @@ final class Driver extends AbstractDriver
     {
         $class = $this->getClass();
 
-        /** @var ConnectionInterface **/
+        /** @var ConnectionInterface */
         return new $class($this);
     }
 
@@ -74,7 +74,7 @@ final class Driver extends AbstractDriver
 
     public function getDatabase(): string
     {
-        /** @var string **/
+        /** @var string */
         return $this->getString('database');
     }
     public function setDatabase(string $value): static
@@ -84,7 +84,7 @@ final class Driver extends AbstractDriver
 
     public function getPrefix(): string
     {
-        /** @var string **/
+        /** @var string */
         return $this->getString('prefix');
     }
     public function setPrefix(string $value): static

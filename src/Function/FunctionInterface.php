@@ -1,7 +1,7 @@
 <?php
 namespace Pyncer\Database\Function;
 
-use Pyncer\Database\QueryInterface;
+use Pyncer\Database\QueryStringInterface;
 
-interface FunctionInterface extends QueryInterface
+interface FunctionInterface extends QueryStringInterface
 {}

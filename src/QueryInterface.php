@@ -1,12 +1,9 @@
 <?php
 namespace Pyncer\Database;
 
-use Pyncer\Database\ConnectionInterface;
-use Stringable;
+use Pyncer\Database\QueryStringInterface;
 
-interface QueryInterface extends Stringable
+interface QueryInterface extends QueryStringInterface
 {
-    public function getConnection(): ConnectionInterface;
-    public function getQueryString(): string;
     public function execute(?array $params = null): bool|array|object;
 }

@@ -3,6 +3,7 @@ namespace Pyncer\Database\Sql\Function;
 
 use Pyncer\Database\ConnectionInterface;
 use Pyncer\Database\ConnectionTrait;
+use Pyncer\Database\Expression\ExpressionInterface;
 use Pyncer\Database\Function\FunctionInterface;
 use Pyncer\Database\Record\SearchMode;
 use Pyncer\Database\Sql\Build\BuildColumnTrait;
@@ -65,6 +66,8 @@ class MatchAgainstFunction implements FunctionInterface
     {
         if ($value === null) {
             $value = '';
+        } elseif ($value instanceof ExpressionInterface) {
+            $value = '\'' . $value->getQueryString() . '\'';
         } else {
             $value = $this->buildScalar($value);
         }

@@ -3,7 +3,7 @@ namespace Pyncer\Database;
 
 trait TablesTrait
 {
-    /** @var array<string> **/
+    /** @var array<string> */
     private array $tables;
 
     /**

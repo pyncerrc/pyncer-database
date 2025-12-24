@@ -337,7 +337,7 @@ trait BuildConditionsTrait
         SearchMode $searchMode = SearchMode::NATURAL_LANGUAGE
     ): string
     {
-        /** @var \Pyncer\Database\Sql\Function\MatchAgainstFunction **/
+        /** @var \Pyncer\Database\Sql\Function\MatchAgainstFunction */
         $matchAgainst = $this->getConnection()->functions(
             $this->getTable(),
             'MatchAgainst'

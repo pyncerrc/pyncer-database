@@ -52,7 +52,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
     {
         parent::__construct($connection, $table);
 
-        /** @var object **/
+        /** @var object */
         $result = $connection->execute(sprintf(
             "SELECT
                 `ENGINE`,
@@ -109,7 +109,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
     {
         $existing = [];
 
-        /** @var object **/
+        /** @var object */
         $result = $this->getConnection()->execute(sprintf(
             "SELECT *
             FROM
@@ -343,7 +343,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
         $fulltext = [];
         $comment = [];
 
-        /** @var object **/
+        /** @var object */
         $result = $this->getConnection()->execute(
             'SHOW INDEX FROM ' . $this->buildTable($this->getTable()) .
             "WHERE `Key_name` != 'PRIMARY'"
@@ -389,7 +389,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
         $referenceTable = [];
         $referenceColumns = [];
 
-        /** @var object **/
+        /** @var object */
         $result = $this->getConnection()->execute(sprintf(
             "SELECT
                 `CONSTRAINT_NAME`,
@@ -423,7 +423,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
             $foreignKey->setReferenceTable($referenceTable[$key]);
             $foreignKey->setReferenceColumns($referenceColumns[$key]);
 
-            /** @var object **/
+            /** @var object */
             $result2 = $this->getConnection()->execute(sprintf(
                 "SELECT
                     `DELETE_RULE`,
@@ -474,7 +474,7 @@ class AlterTableQuery extends AbstractAlterTableQuery
     {
         $existing = [];
 
-        /** @var object **/
+        /** @var object */
         $result = $this->getConnection()->execute(
             'SHOW INDEX FROM ' . $this->buildTable($this->getTable()) .
             "WHERE `Key_name` = 'PRIMARY'"

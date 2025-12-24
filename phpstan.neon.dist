@@ -1,9 +1,9 @@
 parameters:
-    checkMissingIterableValueType: false
     level: max
     paths:
         - src
     ignoreErrors:
+        -   identifier: missingType.iterableValue
         -
             message: "#^Parameter \\#7 \\$flags of method mysqli::real_connect\\(\\) expects int, int\\|null given\\.$#"
             count: 1
