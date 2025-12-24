@@ -3,6 +3,8 @@ namespace Pyncer\Database\Sql\Expression;
 
 use Pyncer\Database\Expression\AbstractExpression;
 
+use function Pyncer\Array\unset_empty as pyncer_array_unset_empty;
+
 class Expression extends AbstractExpression
 {
     protected array $groups = [];
@@ -73,11 +75,15 @@ class Expression extends AbstractExpression
         return $this;
     }
 
-    private function cleanWords(array $words): array
+    private function cleanWords(array $words, bool $allowPhrases = false): array
     {
-        return array_map(
-            function($value) {
-                if (str_contains($value, ' ')) {
+        $words = array_map(
+            function($value) use($allowPhrases) {
+                $value = trim($value);
+
+                $value = preg_replace('/[+\-<>~()*@"]/', '', $value) ?? '';
+
+                if ($allowPhrases && str_contains($value, ' ')) {
                     $value = '"' . $value . '"';
                 }
 
@@ -85,6 +91,8 @@ class Expression extends AbstractExpression
             },
             $words
         );
+
+        return pyncer_array_unset_empty($words);
     }
 
     public function getQueryString(): string

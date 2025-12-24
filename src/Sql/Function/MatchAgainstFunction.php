@@ -67,7 +67,7 @@ class MatchAgainstFunction implements FunctionInterface
         if ($value === null) {
             $value = '';
         } elseif ($value instanceof ExpressionInterface) {
-            $value = '\'' . $value->getQueryString() . '\'';
+            $value = $this->buildScalar($value->getQueryString());
         } else {
             $value = $this->buildScalar($value);
         }
