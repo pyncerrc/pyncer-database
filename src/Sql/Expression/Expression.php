@@ -8,6 +8,28 @@ use function Pyncer\Array\unset_empty as pyncer_array_unset_empty;
 class Expression extends AbstractExpression
 {
     protected array $groups = [];
+    protected bool $allowTruncationOperator = false;
+    protected bool $allowRelevanceOperators = false;
+
+    public function getAllowTruncationOperator(): bool
+    {
+        return $this->allowTruncationOperator;
+    }
+    public function setAllowTruncationOperator(bool $value): static
+    {
+        $this->allowTruncationOperator = $value;
+        return $this;
+    }
+
+    public function getAllowRelevanceOperators(): bool
+    {
+        return $this->allowRelevanceOperators;
+    }
+    public function setAllowRelevanceOperators(bool $value): static
+    {
+        $this->allowRelevanceOperators = $value;
+        return $this;
+    }
 
     public function include(string ...$words): static
     {
@@ -83,7 +105,36 @@ class Expression extends AbstractExpression
             function($value) use($allowPhrases) {
                 $value = trim($value);
 
+                $startOperator = '';
+                $endOperator = '';
+
+                if ($this->getAllowTruncationOperator()) {
+                    if (str_starts_with($value, '*')) {
+                        $startOperator = '*';
+                    }
+
+                    if (str_ends_with($value, '*')) {
+                        $endOperator = '*';
+                    }
+                }
+
+                if ($this->getAllowRelevanceOperators()) {
+                    if (str_starts_with($value, '>')) {
+                        $startOperator = '>';
+                    }
+
+                    if (str_starts_with($value, '<')) {
+                        $startOperator = '<';
+                    }
+                }
+
                 $value = preg_replace('/[+-<>~()*@"]/', '', $value) ?? '';
+
+                if ($value === '') {
+                    return $value;
+                }
+
+                $value = $startOperator . $value . $endOperator;
 
                 if ($allowPhrases && str_contains($value, ' ')) {
                     $value = '"' . $value . '"';
