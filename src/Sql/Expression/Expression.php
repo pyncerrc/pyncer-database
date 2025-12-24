@@ -11,7 +11,7 @@ class Expression extends AbstractExpression
 
     public function includes(string ...$words): static
     {
-        $words = $this->cleanWords($words);
+        $words = $this->cleanWords($words, true);
 
         if (count($words) > 1) {
             $groups[] = '+(' . implode(' ', $words) .')';
@@ -24,7 +24,7 @@ class Expression extends AbstractExpression
 
     public function excludes(string ...$words): static
     {
-        $words = $this->cleanWords($words);
+        $words = $this->cleanWords($words, true);
 
         if (count($words) > 1) {
             $groups[] = '-(' . implode(' ', $words) .')';
@@ -37,7 +37,7 @@ class Expression extends AbstractExpression
 
     public function optional(string ...$words): static
     {
-        $words = $this->cleanWords($words);
+        $words = $this->cleanWords($words, true);
 
         if (count($words) > 1) {
             $groups[] = '(' . implode(' ', $words) .')';
@@ -50,6 +50,8 @@ class Expression extends AbstractExpression
 
     public function distance(int $distance, string ...$words): static
     {
+        $words = $this->cleanWords($words, false);
+
         $words = implode(' ', $words);
 
         // Only one word so just make it optional
@@ -64,7 +66,7 @@ class Expression extends AbstractExpression
 
     public function negates(string ...$words): static
     {
-        $words = $this->cleanWords($words);
+        $words = $this->cleanWords($words, true);
 
         if (count($words) > 1) {
             $groups[] = '~(' . implode(' ', $words) .')';
@@ -75,13 +77,13 @@ class Expression extends AbstractExpression
         return $this;
     }
 
-    private function cleanWords(array $words, bool $allowPhrases = false): array
+    private function cleanWords(array $words, bool $allowPhrases): array
     {
         $words = array_map(
             function($value) use($allowPhrases) {
                 $value = trim($value);
 
-                $value = preg_replace('/[+\-<>~()*@"]/', '', $value) ?? '';
+                $value = preg_replace('/[+-<>~()*@"]/', '', $value) ?? '';
 
                 if ($allowPhrases && str_contains($value, ' ')) {
                     $value = '"' . $value . '"';
