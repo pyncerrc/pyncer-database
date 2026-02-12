@@ -25,10 +25,12 @@ use Pyncer\Database\Sql\Record\InsertQuery;
 use Pyncer\Database\Sql\Record\SelectQuery;
 use Pyncer\Database\Sql\Record\SelectQueryQuery;
 use Pyncer\Database\Sql\Record\UpdateQuery;
-use Pyncer\Database\Sql\Table\CreateTableQuery;
 use Pyncer\Database\Sql\Table\AlterTableQuery;
-use Pyncer\Database\Table\CreateTableQueryInterface;
+use Pyncer\Database\Sql\Table\CreateTableQuery;
+use Pyncer\Database\Sql\Table\LockTableQuery;
 use Pyncer\Database\Table\AlterTableQueryInterface;
+use Pyncer\Database\Table\CreateTableQueryInterface;
+use Pyncer\Database\Table\LockTableInterface;
 use Pyncer\Exception\InvalidArgumentException;
 use Pyncer\Exception\RuntimeException;
 
@@ -198,6 +200,20 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
         /** @var bool */
         return $this->execute('COMMIT');
+    }
+
+    public function autocommit(bool $on): bool
+    {
+        return $this->execute('SET autocommit=' . ($on ? '1' : '0'));
+    }
+
+    public function lock(): LockTableInterface
+    {
+        return new LockTableQuery($this);
+    }
+    public function unlock(): bool
+    {
+        return $this->execute('UNLOCK TABLES');
     }
 
     public function select(string $table): SelectQueryInterface

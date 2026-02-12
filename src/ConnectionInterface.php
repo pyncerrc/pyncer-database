@@ -8,8 +8,9 @@ use Pyncer\Database\Record\DeleteQueryInterface;
 use Pyncer\Database\Record\InsertQueryInterface;
 use Pyncer\Database\Record\SelectQueryInterface;
 use Pyncer\Database\Record\UpdateQueryInterface;
-use Pyncer\Database\Table\CreateTableQueryInterface;
 use Pyncer\Database\Table\AlterTableQueryInterface;
+use Pyncer\Database\Table\CreateTableQueryInterface;
+use Pyncer\Database\Table\LockTableInterface;
 
 interface ConnectionInterface extends
     EncodingInterface,
@@ -51,6 +52,10 @@ interface ConnectionInterface extends
     public function start(): bool;
     public function rollback(): bool;
     public function commit(): bool;
+    public function autocommit(bool $on): bool;
+
+    public function lock(): LockTableInterface;
+    public function unlock(): bool;
 
     /**
     * Select rows from the specified table.

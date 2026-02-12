@@ -6,6 +6,8 @@
 
 - Added Expression class and interface for use with MATCH AGAINST function.
 - Added QueryStringInterface for queries components that do not execute.
+- Added lock and unlock methods to ConnectionInterface.
+- Added autocommit method to ConnectionInterface.
 
 ### Changed
 
