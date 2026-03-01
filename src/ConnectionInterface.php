@@ -10,7 +10,7 @@ use Pyncer\Database\Record\SelectQueryInterface;
 use Pyncer\Database\Record\UpdateQueryInterface;
 use Pyncer\Database\Table\AlterTableQueryInterface;
 use Pyncer\Database\Table\CreateTableQueryInterface;
-use Pyncer\Database\Table\LockTableInterface;
+use Pyncer\Database\Table\LockTablesInterface;
 
 interface ConnectionInterface extends
     EncodingInterface,
@@ -54,7 +54,7 @@ interface ConnectionInterface extends
     public function commit(): bool;
     public function autocommit(bool $on): bool;
 
-    public function lock(): LockTableInterface;
+    public function lock(): LockTablesInterface;
     public function unlock(): bool;
 
     /**

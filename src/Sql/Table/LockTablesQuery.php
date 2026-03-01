@@ -3,12 +3,12 @@ namespace Pyncer\Database\Sql\Table;
 
 use Pyncer\Database\AbstractQuery;
 use Pyncer\Database\Sql\Build\BuildTableTrait;
-use Pyncer\Database\Table\LockTableInterface;
+use Pyncer\Database\Table\LockTablesInterface;
 use Pyncer\Exception\InvalidArgumentException;
 use Pyncer\Exception\RuntimeException;
 
-class LockTableQuery extends AbstractQuery implements
-    LockTableInterface
+class LockTablesQuery extends AbstractQuery implements
+    LockTablesInterface
 {
     use BuildTableTrait;
 
@@ -85,7 +85,7 @@ class LockTableQuery extends AbstractQuery implements
 
     public function execute(?array $params = null): bool|array|object
     {
-        if (count($tables) === 0) {
+        if (count($this->tables) === 0) {
             throw new RuntimeException(
                 'No tables set.'
             );
