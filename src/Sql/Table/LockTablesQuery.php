@@ -19,7 +19,7 @@ class LockTablesQuery extends AbstractQuery implements
         foreach ($tables as $table) {
             if (is_string($table)) {
                 $this->tables[] = [$table, null, 'WRITE'];
-                return $this;
+                continue;
             }
 
             $table = array_values($table);
@@ -27,6 +27,8 @@ class LockTablesQuery extends AbstractQuery implements
             $count = count($table);
 
             switch ($count) {
+                case 1:
+                    $this->tables[] = [$table[0], null, 'WRITE'];
                 case 2:
                     $this->tables[] = [$table[0], $table[1], 'WRITE'];
                     break;
@@ -43,7 +45,7 @@ class LockTablesQuery extends AbstractQuery implements
         foreach ($tables as $table) {
             if (is_string($table)) {
                 $this->tables[] = [$table, null, 'READ'];
-                return $this;
+                continue;
             }
 
             $table = array_values($table);
@@ -51,6 +53,8 @@ class LockTablesQuery extends AbstractQuery implements
             $count = count($table);
 
             switch ($count) {
+                case 2:
+                    $this->tables[] = [$table[0], null, 'READ'];
                 case 2:
                     $this->tables[] = [$table[0], $table[1], 'READ'];
                     break;
