@@ -53,7 +53,7 @@ class LockTablesQuery extends AbstractQuery implements
             $count = count($table);
 
             switch ($count) {
-                case 2:
+                case 1:
                     $this->tables[] = [$table[0], null, 'READ'];
                 case 2:
                     $this->tables[] = [$table[0], $table[1], 'READ'];
@@ -100,7 +100,7 @@ class LockTablesQuery extends AbstractQuery implements
 
     public function getQueryString(): string
     {
-        $query = 'LOCK TABLES .';
+        $query = 'LOCK TABLES ';
 
         $tables = [];
 
