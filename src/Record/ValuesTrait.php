@@ -1,6 +1,7 @@
 <?php
 namespace Pyncer\Database\Record;
 
+use DateTimeInterface;
 use Pyncer\Database\Function\FunctionInterface;
 use Pyncer\Exception\InvalidArgumentException;
 use Stringable;
@@ -22,6 +23,7 @@ trait ValuesTrait
 
             if ($value === null ||
                 is_scalar($value) ||
+                $value instanceof DateTimeInterface ||
                 $value instanceof FunctionInterface
             ) {
                 $this->values[$name] = $value;

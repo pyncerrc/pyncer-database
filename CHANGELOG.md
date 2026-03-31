@@ -12,6 +12,7 @@
 ### Changed
 
 - FunctionInterface now extends QueryStringInterface instead of QueryInterface.
+- The where and values methods now support DateTimeInterface.
 
 ## 1.4.0 - 2025-10-30
 

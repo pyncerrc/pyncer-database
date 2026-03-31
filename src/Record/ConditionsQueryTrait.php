@@ -1,6 +1,7 @@
 <?php
 namespace Pyncer\Database\Record;
 
+use DateTimeInterface;
 use Pyncer\Database\Record\ConditionsInterface;
 
 use function in_array;
@@ -31,6 +32,8 @@ trait ConditionsQueryTrait
                     $value,
                     false
                 );
+            } elseif ($value instanceof DateTimeInterface) {
+                $condition->dateTimeCompare($column, $value, ($not ? '!=' : '='));
             } else {
                 $conditions->compare($column, $value, ($not ? '!=' : '='));
             }
