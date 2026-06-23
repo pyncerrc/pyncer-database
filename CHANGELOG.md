@@ -8,11 +8,19 @@
 - Added QueryStringInterface for queries components that do not execute.
 - Added lock and unlock methods to ConnectionInterface.
 - Added autocommit method to ConnectionInterface.
+- Added CaseFunction to replace CaseWhenFunction
+
+### Fixed
+
+- Fixed bad call in renameColumn method.
 
 ### Changed
 
 - FunctionInterface now extends QueryStringInterface instead of QueryInterface.
+- FunctionInterface now has getTable() method.
+- ConditionsInterface and implementations now support FunctionInterface as query.
 - The where and values methods now support DateTimeInterface.
+- CaseWhenFunction is now deprecated.
 
 ## 1.4.0 - 2025-10-30
 

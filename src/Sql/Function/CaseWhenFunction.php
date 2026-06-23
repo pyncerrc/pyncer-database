@@ -12,6 +12,9 @@ use Pyncer\Database\TableTrait;
 use Pyncer\Exception\InvalidArgumentException;
 use Pyncer\Exception\UnexpectedValueException;
 
+/**
+ * @deprecated Use CaseFunction instead.
+ */
 class CaseWhenFunction implements FunctionInterface
 {
     use ConnectionTrait;
@@ -31,11 +34,6 @@ class CaseWhenFunction implements FunctionInterface
     ) {
         $this->setConnection($connection);
         $this->setTable($table);
-    }
-
-    public function execute(?array $params = null): bool|array|object
-    {
-        return $this->getConnection()->execute($this->getQueryString(), $params);
     }
 
     public function case(mixed $column, bool $binary = false): static

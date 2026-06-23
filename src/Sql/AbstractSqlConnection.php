@@ -454,7 +454,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
         /** @var bool */
         return $this->alterTable($table)
-            ->rename($oldColumnName, $newColumnName)
+            ->rename($newColumnName, $oldColumnName)
             ->execute();
     }
 }

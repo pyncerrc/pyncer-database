@@ -2,6 +2,7 @@
 namespace Pyncer\Database\Record;
 
 use Pyncer\Database\ConnectionInterface;
+use Pyncer\Database\Function\FunctionInterface;
 use Pyncer\Database\Record\WhereQueryInterface;
 use Pyncer\Database\Record\SearchMode;
 use Stringable;
@@ -10,7 +11,7 @@ interface ConditionsInterface extends Stringable
 {
     public function getConnection(): ConnectionInterface;
     public function getTable(): string;
-    public function getQuery(): RecordQueryInterface;
+    public function getQuery(): RecordQueryInterface|FunctionInterface;
 
     public function orOpen(): static;
     public function orClose(): static;

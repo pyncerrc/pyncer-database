@@ -2,6 +2,7 @@
 namespace Pyncer\Database\Record;
 
 use Pyncer\Database\ConnectionTrait;
+use Pyncer\Database\Function\FunctionInterface;
 use Pyncer\Database\Record\ConditionsInterface;
 use Pyncer\Database\Record\RecordQueryInterface;
 use Pyncer\Database\Record\SearchMode;
@@ -13,23 +14,23 @@ abstract class AbstractConditions implements ConditionsInterface
     use ConnectionTrait;
     use TableTrait;
 
-    private RecordQueryInterface $query;
+    private RecordQueryInterface|FunctionInterface $query;
     protected array $conditions = [];
     protected bool $inSingleNot = false;
     protected array $currentBlockType = ['AND'];
 
-    public function __construct(RecordQueryInterface $query)
+    public function __construct(RecordQueryInterface|FunctionInterface $query)
     {
         $this->setQuery($query);
         $this->setConnection($query->getConnection());
         $this->setTable($query->getTable());
     }
 
-    public function getQuery(): RecordQueryInterface
+    public function getQuery(): RecordQueryInterface|FunctionInterface
     {
         return $this->query;
     }
-    protected function setQuery(RecordQueryInterface $value): static
+    protected function setQuery(RecordQueryInterface|FunctionInterface $value): static
     {
         $this->query = $value;
         return $this;
