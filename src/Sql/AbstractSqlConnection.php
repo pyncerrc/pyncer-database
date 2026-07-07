@@ -204,6 +204,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
 
     public function autocommit(bool $on): bool
     {
+        /** @var bool */
         return $this->execute('SET autocommit=' . ($on ? '1' : '0'));
     }
 
@@ -213,6 +214,7 @@ abstract class AbstractSqlConnection extends AbstractConnection
     }
     public function unlock(): bool
     {
+        /** @var bool */
         return $this->execute('UNLOCK TABLES');
     }
 
