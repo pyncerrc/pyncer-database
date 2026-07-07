@@ -33,7 +33,7 @@ trait ConditionsQueryTrait
                     false
                 );
             } elseif ($value instanceof DateTimeInterface) {
-                $condition->dateTimeCompare($column, $value, ($not ? '!=' : '='));
+                $conditions->dateTimeCompare($column, $value, ($not ? '!=' : '='));
             } else {
                 $conditions->compare($column, $value, ($not ? '!=' : '='));
             }
