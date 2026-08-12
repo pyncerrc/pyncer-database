@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.1 - 2026-08-12
+
+### Added
+
+- Added separate port param to Driver.
+
 ## 1.5.0 - 2026-07-07
 
 ### Added
