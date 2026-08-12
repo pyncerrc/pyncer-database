@@ -61,25 +61,12 @@ class Connection extends AbstractSqlConnection
         }
 
         try {
-            $host = $driver->getHost();
-            if ($host === null) {
-                $host = null;
-                $port = null;
-            } else {
-                if (strpos($host, ':') !== false) {
-                    list($host, $port) = explode(':', $host, 2);
-                    $port = intval($port) ?: null;
-                } else {
-                    $port = null;
-                }
-            }
-
             $this->mysql->real_connect(
-                $host,
+                $driver->getHost(),
                 $driver->getUsername(),
                 $driver->getPassword(),
                 $driver->getDatabase(),
-                $port,
+                $driver->getPort(),
                 $driver->getString('socket', null),
                 $driver->getInt('flags', 0)
             );

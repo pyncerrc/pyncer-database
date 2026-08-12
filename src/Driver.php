@@ -15,11 +15,14 @@ final class Driver extends AbstractDriver
         ?string $username,
         ?string $password,
         string $database,
+        ?int $port = null,
         string $prefix = '',
         array $params = []
     ) {
         parent::__construct($name, $params);
 
+        // Port first so host:port takes precedence
+        $this->setPort($port);
         $this->setHost($host);
         $this->setUsername($username);
         $this->setPassword($password);
@@ -51,7 +54,24 @@ final class Driver extends AbstractDriver
     }
     public function setHost(?string $value): static
     {
+        if ($value !== null &&
+            str_contains($value, ':')
+        ) {
+            list($value, $port) = explode(':', $value, 2);
+            $port = intval($port) ?: null;
+            $this->setPort($port);
+        }
+
         return $this->setString('host', $value);
+    }
+
+    public function getPort(): ?int
+    {
+        return $this->getInt('port', null);
+    }
+    public function setPort(?int $value): static
+    {
+        return $this->setInt('port', $value);
     }
 
     public function getUsername(): ?string
@@ -104,6 +124,11 @@ final class Driver extends AbstractDriver
 
                 if ($value !== null && !is_string($value)) {
                     throw new InvalidArgumentException('The ' . $key . ' param must be a string or null.');
+                }
+                break;
+            case 'port':
+                if ($value !== null && !is_int($value)) {
+                    throw new InvalidArgumentException('The ' . $key . ' param must be an integer or null.');
                 }
                 break;
             case 'database':
