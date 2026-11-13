@@ -7,6 +7,8 @@ use Pyncer\Database\EncodingInterface;
 use Pyncer\Database\EncodingTrait;
 use Pyncer\Database\EngineInterface;
 use Pyncer\Database\EngineTrait;
+use Pyncer\Database\Exception\ColumnExistsException;
+use Pyncer\Database\Exception\ColumnNotFoundException;
 
 abstract class AbstractConnection implements
     ConnectionInterface,
@@ -57,5 +59,37 @@ abstract class AbstractConnection implements
         }
 
         return $row;
+    }
+
+    public function dropColumn(string $table, string $column): bool
+    {
+        if (!$this->hasColumn($table, $column)) {
+            throw new ColumnNotFoundException($table, $column);
+        }
+
+        /** @var bool */
+        return $this->alterTable($table)
+            ->dropColumn($column)
+            ->execute();
+    }
+
+    public function renameColumn(
+        string $table,
+        string $oldColumnName,
+        string $newColumnName
+    ): bool
+    {
+        if (!$this->hasColumn($table, $oldColumnName)) {
+            throw new ColumnNotFoundException($table, $oldColumnName);
+        }
+
+        if ($this->hasColumn($table, $newColumnName)) {
+            throw new ColumnExistsException($table, $newColumnName);
+        }
+
+        /** @var bool */
+        return $this->alterTable($table)
+            ->rename($newColumnName, $oldColumnName)
+            ->execute();
     }
 }

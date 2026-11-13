@@ -424,39 +424,6 @@ abstract class AbstractSqlConnection extends AbstractConnection
             " LIKE " . $this->buildScalar($column)
         );
 
-        return (count($result) > 0);
-    }
-
-    public function dropColumn(string $table, string $column): bool
-    {
-        if (!$this->hasColumn($table, $column)) {
-            throw new ColumnNotFoundException($table, $column);
-        }
-
-        /** @var bool */
-        return $this->execute(
-            "ALTER TABLE " . $this->buildTable($table) .
-            " DROP " . $this->buildColumn($column)
-        );
-    }
-
-    public function renameColumn(
-        string $table,
-        string $oldColumnName,
-        string $newColumnName
-    ): bool
-    {
-        if (!$this->hasColumn($table, $oldColumnName)) {
-            throw new ColumnNotFoundException($table, $oldColumnName);
-        }
-
-        if ($this->hasColumn($table, $newColumnName)) {
-            throw new ColumnExistsException($table, $newColumnName);
-        }
-
-        /** @var bool */
-        return $this->alterTable($table)
-            ->rename($newColumnName, $oldColumnName)
-            ->execute();
+        return ($this->numRows($result) > 0);
     }
 }

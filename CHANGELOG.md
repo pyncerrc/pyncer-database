@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.2 - Unreleased
+
+### Changed
+
+- Calling dropColumn methods will now automatically handle dropping related foreign keys.
+
 ## 1.5.1 - 2026-08-12
 
 ### Added

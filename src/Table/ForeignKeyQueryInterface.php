@@ -15,6 +15,7 @@ interface ForeignKeyQueryInterface extends QueryInterface, EqualsInterface
     public function getName(): string;
 
     public function getColumns(): array;
+    public function setColumns(array $value): static;
 
     public function getReferenceTable(): string;
     public function setReferenceTable(string $value): static;

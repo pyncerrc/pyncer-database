@@ -308,19 +308,40 @@ abstract class AbstractTableQuery extends AbstractQuery implements
 
     public function dropColumn(string $columnName): static
     {
+        $found = false;
+
         foreach ($this->columns as $name => $column) {
-            if ($column->getNewName() !== null) {
-                if ($column->getNewName() === $columnName) {
-                    unset($this->columns[$name]);
-                    return $this;
-                }
-            } elseif ($column->getName() === $columnName) {
+            $currentName = $column->getNewName() ?? $column->getName();
+
+            if ($currentName === $columnName) {
                 unset($this->columns[$name]);
-                return $this;
+                $found = true;
+                break;
             }
         }
 
-        throw new ColumnNotFoundException($this->getTable(), $columnName);
+        if (!$found) {
+            throw new ColumnNotFoundException($this->getTable(), $columnName);
+        }
+
+        foreach ($this->foreignKeys as $fkName => $foreignKey) {
+            $columns = $foreignKey->getColumns();
+
+            $columnIndex = array_search($columnName, $columns, true);
+
+            if ($columnIndex === false) {
+                continue;
+            }
+
+            if (count($columns) === 1) {
+                $this->dropForeignKey($fkName);
+            } else {
+                unset($columns[$columnIndex]);
+                $foreignKey->setColumns($columns);
+            }
+        }
+
+        return $this;
     }
 
     public function getColumn(string $columnName): ColumnQueryInterface

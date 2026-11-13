@@ -48,6 +48,8 @@ class AlterTableQuery extends AbstractAlterTableQuery
 
     private array $existingTableInformation;
 
+    private array $prependQueries = [];
+
     public function __construct(ConnectionInterface $connection, string $table)
     {
         parent::__construct($connection, $table);
@@ -487,11 +489,53 @@ class AlterTableQuery extends AbstractAlterTableQuery
         return $existing;
     }
 
+    public function dropColumn(string $columnName): static
+    {
+        parent::dropColumn($columnName);
+
+        // Find foreign keys in other tables that reference this column and drop them.
+
+        /** @var object */
+        $result = $this->getConnection()->execute(sprintf(
+            "SELECT
+                `TABLE_NAME`,
+                `CONSTRAINT_NAME`
+            FROM
+                `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE`
+            WHERE
+                `REFERENCED_TABLE_SCHEMA` = %s AND
+                `REFERENCED_TABLE_NAME` = %s AND
+                `REFERENCED_COLUMN_NAME` = %s
+            GROUP BY
+                `TABLE_NAME`,
+                `CONSTRAINT_NAME`
+            ",
+            $this->buildScalar($this->getConnection()->getDatabase()),
+            $this->buildScalar($this->buildTable($this->getTable(), true)),
+            $this->buildScalar($columnName)
+        ));
+
+        while ($row = $this->getConnection()->fetch($result)) {
+            $table = $this->buildTable($row['TABLE_NAME']);
+            $constraint = $this->buildColumn($row['CONSTRAINT_NAME']);
+
+            $this->prependQueries[] = 'ALTER TABLE ' . $table . ' DROP FOREIGN KEY ' . $constraint;
+        }
+
+        return $this;
+    }
+
     public function getQueryString(): string
     {
         $table = $this->buildTable($this->getTable());
 
-        $query = 'ALTER TABLE ' . $table;
+        $query = '';
+
+        if ($this->prependQueries) {
+            $query .= implode(";\n", $this->prependQueries) . ";\n";
+        }
+
+        $query .= 'ALTER TABLE ' . $table;
 
         $ignoreIndexes = [];
         $ignoreForeignKeys = [];

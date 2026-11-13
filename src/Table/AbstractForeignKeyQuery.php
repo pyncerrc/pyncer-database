@@ -88,7 +88,7 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
     {
         return $this->columns;
     }
-    protected function setColumns(array $value): static
+    public function setColumns(array $value): static
     {
         if (!$value) {
             throw new InvalidArgumentException(
@@ -96,7 +96,7 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
             );
         }
 
-        $this->columns = $value;
+        $this->columns = array_values($value);
         return $this;
     }
 
@@ -128,7 +128,7 @@ abstract class AbstractForeignKeyQuery extends AbstractQuery implements
             );
         }
 
-        $this->referenceColumns = $value;
+        $this->referenceColumns = array_values($value);
         return $this;
     }
 
